@@ -1,5 +1,6 @@
 package com.teambarq.barq;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class ShiftActivity extends AppCompatActivity {
     private String BarID;
     private AuthData authData;
     private Button createShiftButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +61,12 @@ public class ShiftActivity extends AppCompatActivity {
                     }
                 }
                 //Launch Queue Activity
-
+                Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
+                startActivity(intent);
             }
         });
     }
+
 
 
 }
