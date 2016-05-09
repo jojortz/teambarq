@@ -5,7 +5,7 @@ package com.teambarq.barq;
  */
 public class Bartender {
     String name;
-    int profilePic;
+    String profilePic;
 
     public Bartender(){
     }
@@ -14,7 +14,7 @@ public class Bartender {
         return this.name;
     }
 
-    public int profilePic(){
+    public String profilePic(){
         return this.profilePic;
     }
 }

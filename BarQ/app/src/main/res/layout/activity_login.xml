@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.jojortz.smartbike.LoginActivity"
+    tools:context="com.teambarq.barq.LoginActivity"
     android:background="@color/white">
 
     <TextView
@@ -21,13 +21,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="39dp"
         android:textColor="@color/colorPrimary"/>
-    <!--ImageView
-        android:id="@+id/logo_imageView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/BarIcon"
-        android:scaleType="fitXY"
-        android:layout_alignBelow="@+id/appName_TextView" /-->
 
         <EditText
             android:id="@+id/username_EditText"

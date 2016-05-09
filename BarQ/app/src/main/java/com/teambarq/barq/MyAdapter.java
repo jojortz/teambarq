@@ -7,17 +7,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-        import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * Created by jojortz on 4/6/2016.
  */
 public class MyAdapter extends ArrayAdapter<Bartender>{
-    Context context;
+    Context thisContext;
     private static LayoutInflater inflater;
 
     public MyAdapter (Context context, ArrayList<Bartender> bartenderList){
         super(context, 0, bartenderList);
+        thisContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -42,7 +45,7 @@ public class MyAdapter extends ArrayAdapter<Bartender>{
             row.setTag(holder);
         }
         ViewHolder h = (ViewHolder) row.getTag();
-        h.image.setImageResource(bartender.profilePic);
+        Picasso.with(thisContext).load(bartender.profilePic).into(h.image);
         h.name.setText(bartender.name);
 
         return row;

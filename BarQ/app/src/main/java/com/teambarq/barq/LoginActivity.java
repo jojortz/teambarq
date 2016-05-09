@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+
+import java.util.ArrayList;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                         new Firebase.AuthResultHandler() {
                             @Override
                             public void onAuthenticated(AuthData authData) {
-                                ref.child("bars").child(authData.getUid()).child("provider").setValue(authData.getProvider());
+                                ref.child("Bars").child(authData.getUid()).child("provider").setValue(authData.getProvider());
                                 //Launch Shift activity
                                 Intent intent = new Intent(LoginActivity.this, ShiftActivity.class);
                                 startActivity(intent);
