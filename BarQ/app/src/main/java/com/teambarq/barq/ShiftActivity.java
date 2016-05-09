@@ -1,9 +1,11 @@
 package com.teambarq.barq;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ public class ShiftActivity extends AppCompatActivity {
     private Firebase ref;
     private String BarID;
     private AuthData authData;
+    Button newShiftButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,19 @@ public class ShiftActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        //add onclick listener to go to serve activitiy
+        newShiftButton = (Button) findViewById(R.id.newShift_Button);
+        newShiftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
 
 }
