@@ -85,10 +85,10 @@ public class ShiftActivity extends AppCompatActivity {
             // Retrieve new posts as they are added to the database
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
-                    Bartender thisBartender = snapshot.getValue(Bartender.class);
-                    BartenderList.add(thisBartender);
-                    Log.i("NewBartender", thisBartender.name);
-                    adapter.notifyDataSetChanged();
+                Bartender thisBartender = snapshot.getValue(Bartender.class);
+                BartenderList.add(thisBartender);
+                Log.i("NewBartender", thisBartender.name);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
