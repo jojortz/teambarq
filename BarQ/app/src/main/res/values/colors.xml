@@ -8,5 +8,10 @@
     <color name="gray">#ACAEAE</color>
     <color name="blue">#0000FF</color>
     <color name="selected_item">#A8DFF4</color>
+    <color name="lightBlue">#0099CC</color>
+    <color name="carribGreen">#00cc99</color>
+    <color name="lipRed">#cc0033</color>
     <color name="transparent">#EFEFEF</color>
+
+
 </resources>

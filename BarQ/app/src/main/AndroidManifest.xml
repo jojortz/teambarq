@@ -23,7 +23,8 @@
         <activity
             android:name=".ShiftActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".ServeActivity"></activity>
+        <activity android:name=".ServeActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

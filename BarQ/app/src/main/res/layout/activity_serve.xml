@@ -1,10 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id = "@+id/serveActivityRL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingRight="0dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.teambarq.barq.ServeActivity">
 
@@ -14,9 +15,8 @@
         android:layout_height="wrap_content"
         android:text="Served"
 
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/upNextTimerView"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/upNextTimerView"
@@ -35,7 +35,86 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-
         />
+
+
+    <ListView
+        android:id="@+id/queueListView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/barLayoutImage"
+        />
+
+
+
+    <com.skyfishjy.library.RippleBackground
+        android:id="@+id/contentCir1"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:rb_color="#0099CC"
+        app:rb_radius="40dp"
+        app:rb_rippleAmount="2"
+        app:rb_duration="6000"
+        app:rb_scale="3"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/upNextTimerView"
+        android:layout_toLeftOf="@+id/servedButton"
+        android:layout_toStartOf="@+id/servedButton">
+        <ImageView
+            android:id="@+id/cirImage1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/locationcircle1"/>
+    </com.skyfishjy.library.RippleBackground>
+
+
+    <com.skyfishjy.library.RippleBackground
+        android:id="@+id/contentCir2"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:rb_color="#00cc99"
+        app:rb_radius="40dp"
+        app:rb_rippleAmount="2"
+        app:rb_duration="6000"
+        app:rb_scale="3"
+        android:layout_alignParentRight="true"        >
+        <ImageView
+            android:id="@+id/cirImage2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/locationcircle2"/>
+    </com.skyfishjy.library.RippleBackground>
+
+
+    <com.skyfishjy.library.RippleBackground
+        android:id="@+id/contentCir3"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:rb_color="#cc0033"
+        app:rb_radius="40dp"
+        app:rb_rippleAmount="2"
+        app:rb_duration="6000"
+        app:rb_scale="3"
+        android:layout_below="@+id/servedButton">
+        <ImageView
+            android:id="@+id/cirImage3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/locationcircle3"/>
+    </com.skyfishjy.library.RippleBackground>
+
 
 </RelativeLayout>
