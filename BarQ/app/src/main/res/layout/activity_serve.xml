@@ -35,6 +35,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+
         />
 
 
@@ -115,6 +116,17 @@
             android:layout_centerInParent="true"
             android:background="@drawable/locationcircle3"/>
     </com.skyfishjy.library.RippleBackground>
+
+
+        />
+
+    <ListView
+        android:id="@+id/OrderList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/servedButton"
+        android:layout_alignLeft="@+id/servedButton"
+        android:layout_alignStart="@+id/servedButton" />
 
 
 </RelativeLayout>
