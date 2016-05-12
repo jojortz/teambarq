@@ -12,17 +12,24 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class ShiftActivity extends AppCompatActivity {
-    private ArrayList<Bartender> BartenderList = new ArrayList<>();
-    private ArrayList<Bartender> ServerList = new ArrayList();
+    private ArrayList<Bartender> BartenderList;
+    private ArrayList<String> ActiveBartenderList;
     private Firebase ref;
+    private Firebase activeListRef;
+    private GridView gridview;
     private String BarID;
     private AuthData authData;
     private Button createShiftButton;
+    private MyAdapter adapter;
 
 
     @Override
@@ -30,20 +37,22 @@ public class ShiftActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift);
 
+        //Initializing Bartender arrays
+        BartenderList = new ArrayList<>();
+        ActiveBartenderList = new ArrayList<>();
 
         //Initializing Firebase database for HistoryActivity
-      /*  ref = new Firebase("https://barq.firebaseio.com/");
+        ref = new Firebase("https://barq.firebaseio.com/");
         authData = ref.getAuth();
-        BarID = authData.getUid();*/
+        BarID = authData.getUid();
 
-        Bartender testBartender = new Bartender();
-        testBartender.profilePic = "https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/10487280_10207376636688276_3277337388999426495_n.jpg?oh=5a65fb3a25ff4d777d14e7298ff7f880&oe=57E27F4D";
-        testBartender.name = "Jojo Ortiz";
-        BartenderList.add(testBartender);
+        activeListRef = ref.child("Bars").child(BarID).child("ActiveBartenderList").push();
 
-        final GridView gridview = (GridView) findViewById(R.id.bartender_gridview);
-        gridview.setAdapter(new MyAdapter(this,BartenderList));
+        gridview = (GridView) findViewById(R.id.bartender_gridview);
+        adapter = new MyAdapter(this,BartenderList);
+        gridview.setAdapter(adapter);
         gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        loadBartenderList();
 
         createShiftButton = (Button) findViewById(R.id.newShift_Button);
         createShiftButton.setOnClickListener(new View.OnClickListener() {
@@ -55,14 +64,50 @@ public class ShiftActivity extends AppCompatActivity {
                     for (int i=0; i<checkedItems.size(); i++) {
                         if (checkedItems.valueAt(i)) {
                             Bartender newBartender = BartenderList.get(checkedItems.keyAt(i));
-                            ServerList.add(newBartender);
-                            Toast.makeText(getApplicationContext(),newBartender.getName(),Toast.LENGTH_SHORT).show();
+                            ActiveBartenderList.add(newBartender.getId());
                         }
                     }
                 }
+
+                //Add active list to Firebase
+                activeListRef.setValue(ActiveBartenderList);
                 //Launch Queue Activity
                 Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    //Loads bartender list from Firebase and populates it into gridview
+    private void loadBartenderList(){
+        BartenderList.clear();
+        ref.child("Bars").child(BarID).child("BartenderList").addChildEventListener(new ChildEventListener() {
+            // Retrieve new posts as they are added to the database
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
+                    Bartender thisBartender = snapshot.getValue(Bartender.class);
+                    BartenderList.add(thisBartender);
+                    Log.i("NewBartender", thisBartender.name);
+                    adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot snapshot, String childKey) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot snapshot, String childKey) {
+
+            }
+            @Override
+            public void onCancelled(FirebaseError error) {
+
             }
         });
     }

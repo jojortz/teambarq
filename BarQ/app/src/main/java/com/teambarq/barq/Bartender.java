@@ -6,6 +6,7 @@ package com.teambarq.barq;
 public class Bartender {
     String name;
     String profilePic;
+    String id;
 
     public Bartender(){
     }
@@ -16,5 +17,9 @@ public class Bartender {
 
     public String profilePic(){
         return this.profilePic;
+    }
+
+    public String getId(){
+        return this.id;
     }
 }
