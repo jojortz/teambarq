@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,6 +25,8 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.skyfishjy.library.RippleBackground;
+
+import junit.framework.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,61 +62,82 @@ public class ServeActivity extends AppCompatActivity {
         ImageView barLayoutView = (ImageView) findViewById(R.id.barLayoutImage);
         Picasso.with(context).load(R.drawable.barlayoutublank).into(barLayoutView);
 
-        //set current time
-        //topQueueTime = System.currentTimeMillis();
-
-        //RelativeLayout serveRL = (RelativeLayout) findViewById(R.id.serveActivityRL);
-        //RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50,60);
-
         //initialize location circles
         Resources res = getResources();
         final Drawable drawable1 = res.getDrawable(R.drawable.locationcircle1);
-        ImageView img1 = (ImageView) findViewById(R.id.cirImage1);
-        img1.setBackgroundDrawable(drawable1);
-        img1.setVisibility(View.INVISIBLE);
+        ImageView cir1ImageView = (ImageView) findViewById(R.id.cirImage1);
+        cir1ImageView.setBackgroundDrawable(drawable1);
+        cir1ImageView.setVisibility(View.INVISIBLE);
 
         final Drawable drawable2 = res.getDrawable(R.drawable.locationcircle2);
-        ImageView img2 = (ImageView) findViewById(R.id.cirImage2);
-        img2.setBackgroundDrawable(drawable2);
-        img2.setVisibility(View.INVISIBLE);
+        ImageView cir2ImageView = (ImageView) findViewById(R.id.cirImage2);
+        cir2ImageView.setBackgroundDrawable(drawable2);
+        cir2ImageView.setVisibility(View.INVISIBLE);
 
         final Drawable drawable3 = res.getDrawable(R.drawable.locationcircle3);
-        ImageView img3 = (ImageView) findViewById(R.id.cirImage3);
-        //img3.setBackgroundDrawable(drawable3);
-        img3.setVisibility(View.INVISIBLE);
-//
-//            final Drawable drawable2 = res.getDrawable(R.drawable.locationcircle1);
-//            drawable2.setColorFilter(res.getColor(R.color.carribGreen), PorterDuff.Mode.SRC_ATOP);
-//            ImageView img2 = (ImageView) findViewById(R.id.cirImage2);
-//            img2.setBackgroundDrawable(drawable2);
-//
-//            img2.setX(500);
-//            img2.setY(600);
-//
-//            final Drawable drawable3 = res.getDrawable(R.drawable.locationcircle1);
-//            drawable3.setColorFilter(res.getColor(R.color.lipRed), PorterDuff.Mode.SRC_ATOP);
-//            ImageView img3 = (ImageView) findViewById(R.id.cirImage3);
-//            img3.setBackgroundDrawable(drawable3);
-//
-//            img3.setX(500);
-//            img3.setY(700);
+        ImageView cir3ImageView = (ImageView) findViewById(R.id.cirImage3);
+        cir3ImageView.setBackgroundDrawable(drawable3);
+        cir3ImageView.setVisibility(View.INVISIBLE);
 
-            //params.leftMargin = 50;
-           // params.rightMargin = 60;
+        //Set listeners for double tap to delete
+        cir1ImageView.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d("TEST", "onDoubleTap");
+                    removeLocationCircle(DEVICEMAC1);
+                    ref.child("Bar1").child("RunningQueue").child(DEVICEMAC1).removeValue();
+                    return super.onDoubleTap(e);
+                }
+            });
 
-            //serveRL.addView(img, params);
-            //ContentFrameLayout content1 = (ContentFrameLayout)findViewById(R.id.contentCir1);
-
-        servedButton = (Button) findViewById(R.id.servedButton);
-
-        //imitate item getting removed from queue
-        servedButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                topQueueTime = System.currentTimeMillis();
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("TEST", "Raw event: " + event.getAction() + ", (" + event.getRawX() + ", " + event.getRawY() + ")");
+                gestureDetector.onTouchEvent(event);
+                return true;
             }
         });
 
+        cir2ImageView.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d("TEST", "onDoubleTap");
+                    removeLocationCircle(DEVICEMAC2);
+                    ref.child("Bar1").child("RunningQueue").child(DEVICEMAC2).removeValue();
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("TEST", "Raw event: " + event.getAction() + ", (" + event.getRawX() + ", " + event.getRawY() + ")");
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
+        cir3ImageView.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d("TEST", "onDoubleTap");
+                    removeLocationCircle(DEVICEMAC3);
+                    ref.child("Bar1").child("RunningQueue").child(DEVICEMAC3).removeValue();
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("TEST", "Raw event: " + event.getAction() + ", (" + event.getRawX() + ", " + event.getRawY() + ")");
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
+        //create handler for up next time
         final Handler timerHandler = new Handler();
         upNextTimer = (TextView) findViewById(R.id.upNextTimerView);
 
@@ -137,34 +162,6 @@ public class ServeActivity extends AppCompatActivity {
         //initialize update clock
         timerHandler.postDelayed(timerRunnable, 100);
 
-
-
-        final RippleBackground rippleBackground1 =(RippleBackground)findViewById(R.id.contentCir1);
-        ImageView cir1ImageView=(ImageView)findViewById(R.id.cirImage1);
-        cir1ImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rippleBackground1.startRippleAnimation();
-            }
-        });
-
-        final RippleBackground rippleBackground2 =(RippleBackground)findViewById(R.id.contentCir2);
-        ImageView cir2ImageView=(ImageView)findViewById(R.id.cirImage2);
-        cir2ImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rippleBackground2.startRippleAnimation();
-            }
-        });
-
-        final RippleBackground rippleBackground3 =(RippleBackground)findViewById(R.id.contentCir3);
-        ImageView cir3ImageView=(ImageView)findViewById(R.id.cirImage3);
-        cir3ImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rippleBackground3.startRippleAnimation();
-            }
-        });
 
 
         devices = new ArrayList<Device>();
@@ -296,6 +293,10 @@ public class ServeActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 String MACid = dataSnapshot.getKey();
+
+                //update view by removing location circle
+                removeLocationCircle(MACid);
+
                 Device currentDevice;
                 long currentPosition = (long) dataSnapshot.child("QueuePosition").getValue();
 //                Log.e("FB", "Deleting");
@@ -307,9 +308,6 @@ public class ServeActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
-                //update view by removing location circle
-                removeLocationCircle(MACid);
 
 
                 Query queryRef2 = ref.child("Bar1").child("RunningQueue").orderByChild("QueuePosition").startAt(currentPosition);
@@ -323,7 +321,6 @@ public class ServeActivity extends AppCompatActivity {
                             if (order2.QueuePosition == 2){
                                 topQueueTime = order2.TimeIn;
                                 Log.i("FB", String.valueOf(topQueueTime));
-
                             }
 
                             int newPosition = order2.QueuePosition - 1;
@@ -361,7 +358,7 @@ public class ServeActivity extends AppCompatActivity {
             }
         });
 
-        //TODO handle when there are no devices in queue -- update timer to waiting
+        //Check to see if any items in running queue and set topQueueTime to null if not
         ref.child("Bar1").child("RunningQueue").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

@@ -9,18 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.teambarq.barq.ServeActivity">
 
-    <Button
-        android:id="@+id/servedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Served"
-
-        android:layout_below="@+id/upNextTimerView"
-        android:layout_alignRight="@+id/contentCir2"
-        android:layout_alignEnd="@+id/contentCir2"
-        android:layout_marginRight="179dp"
-        android:layout_marginEnd="179dp" />
-
     <TextView
         android:id="@+id/upNextTimerView"
         android:layout_width="wrap_content"
@@ -36,8 +24,6 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:layout_alignParentLeft="true"
-        android:layout_toRightOf="@id/servedButton"
-
         />
 
 
@@ -53,9 +39,9 @@
         app:rb_duration="4000"
         app:rb_scale="3"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/upNextTimerView"
-        android:layout_toLeftOf="@+id/servedButton"
-        android:layout_toStartOf="@+id/servedButton">
+        android:layout_below="@+id/upNextTimerView"
+        android:layout_toLeftOf="@+id/OrderList"
+        >
         <ImageView
             android:id="@+id/cirImage1"
             android:layout_width="64dp"
@@ -69,20 +55,21 @@
         android:id="@+id/contentCir2"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         app:rb_color="@color/lipRed"
         app:rb_radius="30dp"
         app:rb_rippleAmount="2"
         app:rb_duration="4000"
         app:rb_scale="3"
-        android:layout_alignParentRight="true"        >
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/upNextTimerView">
         <ImageView
             android:id="@+id/cirImage2"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/locationcircle2"/>
+            />
     </com.skyfishjy.library.RippleBackground>
 
 
@@ -97,13 +84,13 @@
         app:rb_rippleAmount="2"
         app:rb_duration="4000"
         app:rb_scale="3"
-        android:layout_below="@+id/servedButton">
+        >
         <ImageView
             android:id="@+id/cirImage3"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/locationcircle3"/>
+            />
     </com.skyfishjy.library.RippleBackground>
 
 
