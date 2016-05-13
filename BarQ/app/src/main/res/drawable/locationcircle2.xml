@@ -6,6 +6,6 @@
     android:shape="oval"
     android:thicknessRatio="1.9"
     android:useLevel="false" >
-    <solid android:color="@color/carribGreen" />
+    <solid android:color="@color/lipRed" />
 
 </shape>

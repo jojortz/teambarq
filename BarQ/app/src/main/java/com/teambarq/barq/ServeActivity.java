@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ServeActivity extends AppCompatActivity {
 
-    private long topQueueTime;
+    private long topQueueTime = 0; //initialize
     Button servedButton;
     TextView upNextTimer;
     Context context = this;
@@ -40,6 +40,11 @@ public class ServeActivity extends AppCompatActivity {
     ArrayList<Device> orderHistory;
     ListView l1;
     OrderAdapter adapter;
+
+    private static String DEVICEMAC1 = "5ccf7f0fd6e4"; //center, green
+    private static String DEVICEMAC2 = "5ccf7f006c6c"; //left, red
+    private static String DEVICEMAC3 = "18fe34d45db8"; //right, blue
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,29 +59,27 @@ public class ServeActivity extends AppCompatActivity {
         Picasso.with(context).load(R.drawable.barlayoutublank).into(barLayoutView);
 
         //set current time
-        topQueueTime = System.currentTimeMillis();
-
-        //TODO: pull number of device from firbase
-        int numDevices = 3;
-
-        //TODO get screen size and set circle size and location (probably store in firebase
+        //topQueueTime = System.currentTimeMillis();
 
         //RelativeLayout serveRL = (RelativeLayout) findViewById(R.id.serveActivityRL);
         //RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50,60);
 
-        //customize location circles... probably won't do
-        if (numDevices == 3){
+        //initialize location circles
+        Resources res = getResources();
+        final Drawable drawable1 = res.getDrawable(R.drawable.locationcircle1);
+        ImageView img1 = (ImageView) findViewById(R.id.cirImage1);
+        img1.setBackgroundDrawable(drawable1);
+        img1.setVisibility(View.INVISIBLE);
 
-//            //initialize location circles
-//            Resources res = getResources();
-//            final Drawable drawable1 = res.getDrawable(R.drawable.locationcircle1);
-//            drawable1.setColorFilter(res.getColor(R.color.lightBlue), PorterDuff.Mode.SRC_ATOP);
-//            ImageView img1 = (ImageView) findViewById(R.id.cirImage1);
-//            img1.setBackgroundDrawable(drawable1);
+        final Drawable drawable2 = res.getDrawable(R.drawable.locationcircle2);
+        ImageView img2 = (ImageView) findViewById(R.id.cirImage2);
+        img2.setBackgroundDrawable(drawable2);
+        img2.setVisibility(View.INVISIBLE);
 
-
-//            img1.setX(300);
-//            img1.setY(500);
+        final Drawable drawable3 = res.getDrawable(R.drawable.locationcircle3);
+        ImageView img3 = (ImageView) findViewById(R.id.cirImage3);
+        //img3.setBackgroundDrawable(drawable3);
+        img3.setVisibility(View.INVISIBLE);
 //
 //            final Drawable drawable2 = res.getDrawable(R.drawable.locationcircle1);
 //            drawable2.setColorFilter(res.getColor(R.color.carribGreen), PorterDuff.Mode.SRC_ATOP);
@@ -100,9 +103,6 @@ public class ServeActivity extends AppCompatActivity {
             //serveRL.addView(img, params);
             //ContentFrameLayout content1 = (ContentFrameLayout)findViewById(R.id.contentCir1);
 
-
-        }
-
         servedButton = (Button) findViewById(R.id.servedButton);
 
         //imitate item getting removed from queue
@@ -120,17 +120,23 @@ public class ServeActivity extends AppCompatActivity {
         Runnable timerRunnable = new Runnable() {
             @Override
             public void run() {
-                //action
-                long deltaTime = System.currentTimeMillis() - topQueueTime;
-                String formattedTime = getFormattedTime(deltaTime);
-                upNextTimer.setText(formattedTime);
+
+                if (topQueueTime == 0){
+                    upNextTimer.setText("Waiting for Order");
+                } else {
+                    long deltaTime = System.currentTimeMillis() - topQueueTime;
+                    String formattedTime = getFormattedTime(deltaTime);
+                    upNextTimer.setText(formattedTime);
+                }
                 //sets handler to run every 100 ms
                 timerHandler.postDelayed(this, 100);
+
             }
         };
 
         //initialize update clock
         timerHandler.postDelayed(timerRunnable, 100);
+
 
 
         final RippleBackground rippleBackground1 =(RippleBackground)findViewById(R.id.contentCir1);
@@ -183,8 +189,6 @@ public class ServeActivity extends AppCompatActivity {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
-
-
     }
 
     @Override
@@ -215,10 +219,7 @@ public class ServeActivity extends AppCompatActivity {
         sb.append(":");
         sb.append(seconds);
 
-        String formattedTime = String.format("%d:%02d",
-                minutes, seconds);
-
-        //return(sb.toString());
+        String formattedTime = String.format("%d:%02d", minutes, seconds);
 
         return (formattedTime);
     }
@@ -234,7 +235,7 @@ public class ServeActivity extends AppCompatActivity {
                 String MACid = snapshot.getKey();
                 Device currentDevice;
                 if (snapshot.child("TimeIn").getValue()!= null) {
-//                    Log.e("FB", "Loading previous data");
+//                  Log.e("FB", "Loading previous data");
                     Order order1 = snapshot.getValue(Order.class);
                     if (pos < order1.QueuePosition) {
                         pos = order1.QueuePosition;
@@ -248,6 +249,12 @@ public class ServeActivity extends AppCompatActivity {
                     }
                     orderHistory.add(currentDevice);
                     adapter.notifyDataSetChanged();
+
+                    // update top of queue time for top of the list
+                    if (order1.QueuePosition == 1){
+                        topQueueTime = order1.TimeIn;
+                    }
+
                 }
                 else
                 {
@@ -271,6 +278,18 @@ public class ServeActivity extends AppCompatActivity {
                     }
                     orderHistory.add(currentDevice);
                     adapter.notifyDataSetChanged();
+
+                    // update top of queue time
+                    if (newOrder.QueuePosition == 1){
+                        topQueueTime =  newOrder.TimeIn;
+                    }
+
+                    //update view by adding location circle
+                    addLocationCircle(MACid);
+
+
+
+
                 }
             }
 
@@ -289,17 +308,33 @@ public class ServeActivity extends AppCompatActivity {
                     }
                 }
 
+                //update view by removing location circle
+                removeLocationCircle(MACid);
+
+
                 Query queryRef2 = ref.child("Bar1").child("RunningQueue").orderByChild("QueuePosition").startAt(currentPosition);
                 queryRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                             Order order2 = itemSnapshot.getValue(Order.class);
+
+                            // update top of queue time (do here to avoid latancy issues checking for new pos 1)
+                            if (order2.QueuePosition == 2){
+                                topQueueTime = order2.TimeIn;
+                                Log.i("FB", String.valueOf(topQueueTime));
+
+                            }
+
                             int newPosition = order2.QueuePosition - 1;
                             ref.child("Bar1").child("RunningQueue").child(itemSnapshot.getKey()).child("QueuePosition").setValue(newPosition);
-//                            Log.e("FB", "Updating queue positions in FB");
+                            Log.i("FB", "Updating queue positions in FB");
+
+
                         }
                         pos = pos - 1;
+
+
                     }
 
                     @Override
@@ -308,6 +343,8 @@ public class ServeActivity extends AppCompatActivity {
                     }
                 });
                 adapter.remove(currentDevice);
+
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -324,7 +361,36 @@ public class ServeActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new OrderAdapter(this, R.layout.listview_item_row, orderHistory);
+        //TODO handle when there are no devices in queue -- update timer to waiting
+        ref.child("Bar1").child("RunningQueue").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                //set time to null becuase no items in queue
+                topQueueTime = 0;
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+                adapter = new OrderAdapter(this, R.layout.listview_item_row, orderHistory);
 
         l1 = (ListView) findViewById(R.id.OrderList);
 
@@ -332,5 +398,53 @@ public class ServeActivity extends AppCompatActivity {
             l1.setAdapter(adapter);
         }
 
+    }
+
+    //function to add location circles base on MAC id
+    private void addLocationCircle(String MACid){
+        ImageView img1 = (ImageView) findViewById(R.id.cirImage1); //center, green
+        ImageView img2 = (ImageView) findViewById(R.id.cirImage2); //left, red
+        ImageView img3 = (ImageView) findViewById(R.id.cirImage3); //right, blue
+
+
+        if (MACid.equals(DEVICEMAC1)) {
+            img1.setVisibility(View.VISIBLE);
+            final RippleBackground rippleBackground1 = (RippleBackground) findViewById(R.id.contentCir1);
+            rippleBackground1.startRippleAnimation();
+        }
+        else if (MACid.equals(DEVICEMAC2)) {
+            img2.setVisibility(View.VISIBLE);
+            final RippleBackground rippleBackground2 = (RippleBackground) findViewById(R.id.contentCir2);
+            rippleBackground2.startRippleAnimation();
+        }
+        else if (MACid.equals(DEVICEMAC3)) {
+            img3.setVisibility(View.VISIBLE);
+            final RippleBackground rippleBackground3 = (RippleBackground) findViewById(R.id.contentCir3);
+            rippleBackground3.startRippleAnimation();
+        }
+
+    }
+
+    //function to remove location circles base on MAC id
+    private void removeLocationCircle(String MACid){
+        ImageView img1 = (ImageView) findViewById(R.id.cirImage1); //center, green
+        ImageView img2 = (ImageView) findViewById(R.id.cirImage2); //left, red
+        ImageView img3 = (ImageView) findViewById(R.id.cirImage3); //right, blue
+
+        if (MACid.equals(DEVICEMAC1)) {
+            img1.setVisibility(View.INVISIBLE);
+            final RippleBackground rippleBackground1 = (RippleBackground) findViewById(R.id.contentCir1);
+            rippleBackground1.stopRippleAnimation();
+        }
+        else if (MACid.equals(DEVICEMAC2)) {
+            img2.setVisibility(View.INVISIBLE);
+            final RippleBackground rippleBackground2 = (RippleBackground) findViewById(R.id.contentCir2);
+            rippleBackground2.stopRippleAnimation();
+        }
+        else if (MACid.equals(DEVICEMAC3)) {
+            img3.setVisibility(View.INVISIBLE);
+            final RippleBackground rippleBackground3 = (RippleBackground) findViewById(R.id.contentCir3);
+            rippleBackground3.stopRippleAnimation();
+        }
     }
 }

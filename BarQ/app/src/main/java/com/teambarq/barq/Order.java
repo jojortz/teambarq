@@ -6,7 +6,8 @@ import java.util.List;
 
 public class Order {
     String MACid;
-    String TimeIn;
+    long TimeIn;
+    //String TimeIn;
     int QueuePosition;
     public float Duration;
     List<String> Servers;
@@ -17,8 +18,10 @@ public class Order {
         this.MACid = MACid;
         this.Servers = Servers;
         this.QueuePosition = QueuePosition;
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        this.TimeIn = df.format(c.getTime());;
+        //Calendar c = Calendar.getInstance();
+        //SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        //this.TimeIn = "test";
+        this.TimeIn = System.currentTimeMillis();
+        //this.TimeIn = df.format(c.getTime());;
     }
 }
