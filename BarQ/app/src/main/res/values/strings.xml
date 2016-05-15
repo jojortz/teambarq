@@ -23,4 +23,8 @@
     <!-- Shift Activity-->
     <string name="shift_activity_title">SHIFT CREATOR</string>
     <string name="new_shift_button">Create new shift</string>
+
+    <!-- Navigation Drawer-->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
