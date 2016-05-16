@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.teambarq.barq.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <RelativeLayout
+        android:id="@+id/backgroundView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_delete"
+            android:padding="5dp"
+            android:background="#800000" />
+    </RelativeLayout>
+
+    <com.teambarq.barq.swipelib.SwipeLayout
+        android:id="@+id/foregroundView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/Location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@android:color/holo_green_light"/>
+
+    </com.teambarq.barq.swipelib.SwipeLayout>
+
+</com.teambarq.barq.CoordinatorLayout>

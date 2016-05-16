@@ -40,7 +40,7 @@
         app:rb_scale="3"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/upNextTimerView"
-        android:layout_toLeftOf="@+id/OrderList"
+        android:layout_toLeftOf="@+id/swipe_list"
         >
         <ImageView
             android:id="@+id/cirImage1"
@@ -96,13 +96,16 @@
 
         />
 
-    <ListView
-        android:id="@+id/OrderList"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/swipe_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         android:layout_toRightOf= "@id/barLayoutImage"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"/>
+        tools:listitem="@layout/item_swipe" >
+    </android.support.v7.widget.RecyclerView>
 
 
 </RelativeLayout>

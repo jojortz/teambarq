@@ -9,7 +9,7 @@ public class Order {
     long TimeIn;
     //String TimeIn;
     int QueuePosition;
-    public float Duration;
+    public String Duration;
     List<String> Servers;
 
     public Order() {}

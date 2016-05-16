@@ -6,6 +6,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -35,15 +38,14 @@ import java.util.concurrent.TimeUnit;
 public class ServeActivity extends AppCompatActivity {
 
     private long topQueueTime = 0; //initialize
-    Button servedButton;
     TextView upNextTimer;
     Context context = this;
     Firebase ref = new Firebase("https://barq.firebaseio.com/");
+    Firebase user = ref.child("Bar1");
     ArrayList<Device> devices;
-    int pos = 0;
     ArrayList<Device> orderHistory;
-    ListView l1;
-    OrderAdapter adapter;
+    int pos = 0;
+    SwipeAdapter mAdapter;
 
     private static String DEVICEMAC1 = "5ccf7f0fd6e4"; //center, green
     private static String DEVICEMAC2 = "5ccf7f006c6c"; //left, red
@@ -86,7 +88,7 @@ public class ServeActivity extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent e) {
                     Log.d("TEST", "onDoubleTap");
                     removeLocationCircle(DEVICEMAC1);
-                    ref.child("Bar1").child("RunningQueue").child(DEVICEMAC1).removeValue();
+                    user.child("RunningQueue").child(DEVICEMAC1).removeValue();
                     return super.onDoubleTap(e);
                 }
             });
@@ -105,7 +107,7 @@ public class ServeActivity extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent e) {
                     Log.d("TEST", "onDoubleTap");
                     removeLocationCircle(DEVICEMAC2);
-                    ref.child("Bar1").child("RunningQueue").child(DEVICEMAC2).removeValue();
+                    user.child("RunningQueue").child(DEVICEMAC2).removeValue();
                     return super.onDoubleTap(e);
                 }
             });
@@ -124,7 +126,7 @@ public class ServeActivity extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent e) {
                     Log.d("TEST", "onDoubleTap");
                     removeLocationCircle(DEVICEMAC3);
-                    ref.child("Bar1").child("RunningQueue").child(DEVICEMAC3).removeValue();
+                    user.child("RunningQueue").child(DEVICEMAC3).removeValue();
                     return super.onDoubleTap(e);
                 }
             });
@@ -162,16 +164,18 @@ public class ServeActivity extends AppCompatActivity {
         //initialize update clock
         timerHandler.postDelayed(timerRunnable, 100);
 
-
-
+        //initialize arrays for holding devices and list
         devices = new ArrayList<Device>();
         orderHistory = new ArrayList<Device>();
-//        Firebase newPostRef = ref.child("Bar1").child("Devices");
+
+        //Adding a new device in firebase
+//        Firebase newPostRef = user.child("Devices");
 //        newPostRef.push().setValue(new Device("D1","Blue","Center"));
 //        newPostRef.push().setValue(new Device("D2","Red","Left"));
 //        newPostRef.push().setValue(new Device("D3","Green","Right"));
 
-        ref.child("Bar1").child("Devices").addListenerForSingleValueEvent(new ValueEventListener() {
+        //Loading the devices for the bar from firebase
+        user.child("Devices").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
@@ -179,6 +183,8 @@ public class ServeActivity extends AppCompatActivity {
                     devices.add(device1);
 //                    Log.e("FB", "Adding device data now");
                 }
+
+                //Implement RunningQueue functionality once the devices are loaded
                 loadedDevices();
             }
 
@@ -221,16 +227,27 @@ public class ServeActivity extends AppCompatActivity {
         return (formattedTime);
     }
 
+
+    //Implement RunningQueue fucntionality once the devices are loaded
     protected void loadedDevices()
     {
-        Log.e("FB","All devices added");
-        Firebase ref2 = ref.child("Bar1").child("RunningQueue");
-        Query queryRef2 = ref2.orderByChild("QueuePosition");
-        queryRef2.addChildEventListener(new ChildEventListener() {
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.swipe_list);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter = new SwipeAdapter(orderHistory);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mAdapter);
+
+//        Log.e("FB","All devices added");
+        Query query1 = user.child("RunningQueue").orderByChild("QueuePosition");
+        query1.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 String MACid = snapshot.getKey();
                 Device currentDevice;
+
+                //Load data initially if anything in RunningQueue
                 if (snapshot.child("TimeIn").getValue()!= null) {
 //                  Log.e("FB", "Loading previous data");
                     Order order1 = snapshot.getValue(Order.class);
@@ -244,15 +261,17 @@ public class ServeActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    orderHistory.add(currentDevice);
-                    adapter.notifyDataSetChanged();
+//                    orderHistory.add(currentDevice);
+                    mAdapter.addItem(currentDevice);
+//                    mAdapter.notifyDataSetChanged();
 
                     // update top of queue time for top of the list
                     if (order1.QueuePosition == 1){
                         topQueueTime = order1.TimeIn;
                     }
-
                 }
+
+                //A new embedded device has been added; add it to the list
                 else
                 {
 //                    Log.e("FB", "Adding new device found");
@@ -262,10 +281,9 @@ public class ServeActivity extends AppCompatActivity {
                     Servers.add("Server1");
                     Servers.add("Server2");
                     pos = pos + 1;
-                    Log.e("FB", Integer.toString(pos));
+//                    Log.e("FB", Integer.toString(pos));
                     Order newOrder = new Order(MACid, Servers, pos);
-                    Firebase newPostRef = ref.child("Bar1").child("RunningQueue").child(MACid);
-                    newPostRef.setValue(newOrder);
+                    user.child("RunningQueue").child(MACid).setValue(newOrder);
                     currentDevice = devices.get(0);
                     for (int i = 0; i < devices.size(); i++) {
                         if (devices.get(i).MACid.equals(MACid)) {
@@ -273,8 +291,11 @@ public class ServeActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    orderHistory.add(currentDevice);
-                    adapter.notifyDataSetChanged();
+
+                    mAdapter.addItem(currentDevice);
+//                    orderHistory.add(currentDevice);
+//                    mAdapter.notifyItemInserted(orderHistory.size()-1);
+//                    mAdapter.notifyDataSetChanged();
 
                     // update top of queue time
                     if (newOrder.QueuePosition == 1){
@@ -283,13 +304,10 @@ public class ServeActivity extends AppCompatActivity {
 
                     //update view by adding location circle
                     addLocationCircle(MACid);
-
-
-
-
                 }
             }
 
+            //Handle the case when either order was deleted by the embedded device or deleted/server using the app
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 String MACid = dataSnapshot.getKey();
@@ -297,21 +315,12 @@ public class ServeActivity extends AppCompatActivity {
                 //update view by removing location circle
                 removeLocationCircle(MACid);
 
-                Device currentDevice;
                 long currentPosition = (long) dataSnapshot.child("QueuePosition").getValue();
 //                Log.e("FB", "Deleting");
 //                Log.e("FB", Long.toString(currentPosition));
-                currentDevice = devices.get(0);
-                for (int i = 0; i < devices.size(); i++) {
-                    if (devices.get(i).MACid.equals(MACid)) {
-                        currentDevice = devices.get(i);
-                        break;
-                    }
-                }
 
-
-                Query queryRef2 = ref.child("Bar1").child("RunningQueue").orderByChild("QueuePosition").startAt(currentPosition);
-                queryRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                Query query2 = user.child("RunningQueue").orderByChild("QueuePosition").startAt(currentPosition);
+                query2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
@@ -320,18 +329,14 @@ public class ServeActivity extends AppCompatActivity {
                             // update top of queue time (do here to avoid latancy issues checking for new pos 1)
                             if (order2.QueuePosition == 2){
                                 topQueueTime = order2.TimeIn;
-                                Log.i("FB", String.valueOf(topQueueTime));
+//                                Log.i("FB", String.valueOf(topQueueTime));
                             }
 
                             int newPosition = order2.QueuePosition - 1;
-                            ref.child("Bar1").child("RunningQueue").child(itemSnapshot.getKey()).child("QueuePosition").setValue(newPosition);
-                            Log.i("FB", "Updating queue positions in FB");
-
-
+                            user.child("RunningQueue").child(itemSnapshot.getKey()).child("QueuePosition").setValue(newPosition);
+//                            Log.e("FB", "Updating queue positions in FB");
                         }
                         pos = pos - 1;
-
-
                     }
 
                     @Override
@@ -339,10 +344,7 @@ public class ServeActivity extends AppCompatActivity {
 
                     }
                 });
-                adapter.remove(currentDevice);
-
-
-                adapter.notifyDataSetChanged();
+                mAdapter.deleteItem((int)(currentPosition-1));
             }
 
             @Override
@@ -359,41 +361,55 @@ public class ServeActivity extends AppCompatActivity {
         });
 
         //Check to see if any items in running queue and set topQueueTime to null if not
-        ref.child("Bar1").child("RunningQueue").addChildEventListener(new ChildEventListener() {
+        user.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.child("RunningQueue").getValue()==null){
+                    //set time to null because no items in queue
+                    topQueueTime = 0;
+//                    Log.e("FB", "RunningQueue is empty");
+                }
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //set time to null becuase no items in queue
-                topQueueTime = 0;
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
 
-                adapter = new OrderAdapter(this, R.layout.listview_item_row, orderHistory);
+        mAdapter.setOnItemClickListener(new SwipeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemServed(int position) {
+                final Device d1 = mAdapter.getItem(position);
+                user.child("RunningQueue").child(d1.MACid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        Order order1 = snapshot.getValue(Order.class);
+                        long deltaTime = System.currentTimeMillis() - topQueueTime;
+                        String formattedTime = getFormattedTime(deltaTime);
+                        order1.Duration = formattedTime;
+                        user.child("AllOrders").push().setValue(order1);
+                        user.child("RunningQueue").child(d1.MACid).setValue(null);
+//                        Log.e("FB", "Deleted from FB coz served");
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+                position=position+1;
+                Toast.makeText(ServeActivity.this, "Item served at position :" + position, Toast.LENGTH_LONG).show();
+            }
 
-        l1 = (ListView) findViewById(R.id.OrderList);
+            @Override
+            public void onItemDeleteAction(int position) {
+                Device device1 = mAdapter.getItem(position);
+                user.child("RunningQueue").child(device1.MACid).setValue(null);
+                position=position+1;
+                Toast.makeText(ServeActivity.this, "Item deleted at position" + position, Toast.LENGTH_LONG).show();
+//                Log.e("FB", "Deleted from FB");
+            }
+        });
 
-        if (l1 != null) {
-            l1.setAdapter(adapter);
-        }
+
 
     }
 
