@@ -149,7 +149,7 @@ public class ServeActivity extends AppCompatActivity {
             public void run() {
 
                 if (topQueueTime == 0){
-                    upNextTimer.setText("Waiting for Order");
+                    upNextTimer.setText("0:00");
                 } else {
                     long deltaTime = System.currentTimeMillis() - topQueueTime;
                     String formattedTime = getFormattedTime(deltaTime);
@@ -360,6 +360,7 @@ public class ServeActivity extends AppCompatActivity {
             }
         });
 
+        //dataevent listener
         //Check to see if any items in running queue and set topQueueTime to null if not
         user.addValueEventListener(new ValueEventListener() {
             @Override
@@ -409,6 +410,12 @@ public class ServeActivity extends AppCompatActivity {
             }
         });
 
+//<<<<<<< HEAD
+//        adapter = new OrderAdapter(this, R.layout.listview_item_row, orderHistory);
+//
+//        l1 = (ListView) findViewById(R.id.OrderList);
+//=======
+//>>>>>>> 371862f8ed75226dd75c43d6f8ef6ead757c56d1
 
 
     }

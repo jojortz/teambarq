@@ -20,7 +20,29 @@
     <string name="new_user_invalid_email">Please enter a valid email address.</string>
     <string name="new_user_invalid_password">Please enter a valid password.</string>
 
+    <!-- LoginActivity Strings-->
+    <string name="usersKeyJared">jared</string>
+    <string name="usersValJared">jared</string>
+    <string name="usersKeyBlank"></string>
+    <string name="usersValBlank"></string>
+    <string name="username">username</string>
+    <string name="usernameHint">email</string>
+    <string name="passwordHint">password</string>
+    <string name="setPasswordHint">set password</string>
+    <string name="loginText">login</string>
+    <string name="nextText">Enter</string>
+    <string name="register">register</string>
+    <string name="registerError">Error. Please check email and try again.</string>
+    <string name="registerToast">Username not recognized. Please register.</string>
+    <string name="registerThanks">Thanks for registering!</string>
+    <string name="incorrectLogin">Incorrect password. Try again.</string>
+    <string name="somethingWrong">Something is wrong. Check email and try again.</string>
+
     <!-- Shift Activity-->
     <string name="shift_activity_title">SHIFT CREATOR</string>
     <string name="new_shift_button">Create new shift</string>
+
+    <!-- Serve Activity-->
+    <string name="upNext">Up Next</string>
+
 </resources>
