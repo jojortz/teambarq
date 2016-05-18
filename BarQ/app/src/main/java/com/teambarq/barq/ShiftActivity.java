@@ -11,6 +11,7 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -58,11 +59,8 @@ public class ShiftActivity extends AppCompatActivity {
 
         //Setting up Bartender grid view
         gridview = (GridView) findViewById(R.id.bartender_gridview);
-<<<<<<< HEAD
-        adapter = new MyAdapter(this, BartenderList);
-=======
+
         adapter = new ShiftAdapter(this,BartenderList);
->>>>>>> 0a2a154e78ef2b9b5a066e8ab9743f8fde44d249
         gridview.setAdapter(adapter);
         gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         loadBartenderList();
@@ -113,15 +111,22 @@ public class ShiftActivity extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         if (position == 1)
                         {
-                            Toast.makeText(getApplicationContext(), "Launching Analytics", Toast.LENGTH_SHORT).show();
+                            //Close navigation drawer
+                            mDrawerLayout.closeDrawers();
+                            //Launch Analytics Activity
+                            Intent intent = new Intent(ShiftActivity.this, AnalyticsActivity.class);
+                            startActivity(intent);
                         }
                         else if(position == 2)
                         {
+                            //Close navigation drawer
                             mDrawerLayout.closeDrawers();
                         }
                         else if(position == 3)
                         {
-                            //Launch Queue Activity
+                            //Close navigation drawer
+                            mDrawerLayout.closeDrawers();
+                            //Launch Serve Activity
                             Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                             startActivity(intent);
                         }
