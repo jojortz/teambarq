@@ -3,20 +3,7 @@
     android:id = "@+id/serveActivityRL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="0dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.teambarq.barq.ServeActivity">
-
-    <TextView
-        android:id="@+id/upNextTimerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
 
     <ImageView
         android:id="@+id/barLayoutImage"
@@ -24,6 +11,13 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/columnFrameLayout"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         />
 
 
@@ -33,20 +27,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:rb_color="@color/carribGreen"
+        app:rb_color="@color/softyellow"
         app:rb_radius="30dp"
-        app:rb_rippleAmount="2"
+        app:rb_rippleAmount="3"
         app:rb_duration="4000"
         app:rb_scale="3"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/upNextTimerView"
-        android:layout_toLeftOf="@+id/swipe_list"
-        >
+        android:layout_toStartOf="@id/columnFrameLayout"
+
+        android:layout_marginBottom="290dp"
+        android:layout_alignParentEnd="false">
         <ImageView
             android:id="@+id/cirImage1"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerInParent="true"
+            android:background="@drawable/locationcircle1"
             />
     </com.skyfishjy.library.RippleBackground>
 
@@ -55,20 +50,22 @@
         android:id="@+id/contentCir2"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        app:rb_color="@color/lipRed"
+        app:rb_color="@color/redorange"
         app:rb_radius="30dp"
-        app:rb_rippleAmount="2"
+        app:rb_rippleAmount="3"
         app:rb_duration="4000"
         app:rb_scale="3"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/upNextTimerView">
+        >
         <ImageView
             android:id="@+id/cirImage2"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerInParent="true"
+            android:background="@drawable/locationcircle2"
+
             />
     </com.skyfishjy.library.RippleBackground>
 
@@ -77,35 +74,93 @@
         android:id="@+id/contentCir3"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        app:rb_color="@color/lightBlue"
+        app:rb_color="@color/bluegreen"
         app:rb_radius="30dp"
-        app:rb_rippleAmount="2"
+        app:rb_rippleAmount="3"
         app:rb_duration="4000"
         app:rb_scale="3"
-        >
+        android:layout_toStartOf="@+id/listFrameLayout">
         <ImageView
             android:id="@+id/cirImage3"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerInParent="true"
+            android:background="@drawable/locationcircle3"
             />
     </com.skyfishjy.library.RippleBackground>
 
+    <FrameLayout
+        android:id="@id/columnFrameLayout"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/contentCir1"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/layout_border"
 
-        />
+        >
+
+        <TextView
+            android:id="@+id/upNextTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upNext"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            android:textColor="@color/whitesmoke"
+            />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/listFrameLayout"
+        android:layout_width="290dp"
+        android:layout_height="350dp"
+
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="5dp"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/swipe_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:layout_alignParentTop="true"
+            tools:listitem="@layout/item_swipe"
+            android:layout_gravity="center_horizontal|top">
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/timerFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@id/columnFrameLayout"
+        android:layout_alignEnd="@id/columnFrameLayout"
+        android:layout_below="@id/listFrameLayout"
+        android:background="@drawable/layout_border"
+
+        >
+
+        <TextView
+            android:id="@+id/upNextTimerView"
+            android:text = "@string/waitingTimer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="85sp"
+            android:textColor="@color/whitesmoke"
+            android:textAlignment="center"
+            android:layout_gravity="center_vertical"
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/swipe_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_toRightOf= "@id/barLayoutImage"
-        android:layout_alignParentTop="true"
-        tools:listitem="@layout/item_swipe" >
-    </android.support.v7.widget.RecyclerView>
+
+            />
+    </FrameLayout>
 
 
 </RelativeLayout>
