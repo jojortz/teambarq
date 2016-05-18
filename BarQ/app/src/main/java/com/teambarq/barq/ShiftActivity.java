@@ -11,7 +11,6 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -30,7 +29,7 @@ public class ShiftActivity extends AppCompatActivity {
     private String BarID;
     private AuthData authData;
     private Button createShiftButton;
-    private MyAdapter adapter;
+    private ShiftAdapter adapter;
 
     //Navigation drawer
     private DrawerLayout mDrawerLayout;
@@ -59,7 +58,11 @@ public class ShiftActivity extends AppCompatActivity {
 
         //Setting up Bartender grid view
         gridview = (GridView) findViewById(R.id.bartender_gridview);
+<<<<<<< HEAD
         adapter = new MyAdapter(this, BartenderList);
+=======
+        adapter = new ShiftAdapter(this,BartenderList);
+>>>>>>> 0a2a154e78ef2b9b5a066e8ab9743f8fde44d249
         gridview.setAdapter(adapter);
         gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         loadBartenderList();
