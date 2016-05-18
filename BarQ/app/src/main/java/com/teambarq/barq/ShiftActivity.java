@@ -1,8 +1,11 @@
 package com.teambarq.barq;
 
 import android.content.Intent;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
@@ -30,6 +33,14 @@ public class ShiftActivity extends AppCompatActivity {
     private Button createShiftButton;
     private ShiftAdapter adapter;
 
+    //Navigation drawer
+    private DrawerLayout mDrawerLayout;
+    private RecyclerView navRecyclerView;
+    RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
+    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+
+    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +60,13 @@ public class ShiftActivity extends AppCompatActivity {
 
         activeListRef = ref.child("Bars").child(BarID).child("ActiveBartenderList").push();
 
+        //Setting up Bartender grid view
         gridview = (GridView) findViewById(R.id.bartender_gridview);
+<<<<<<< HEAD
+        adapter = new MyAdapter(this, BartenderList);
+=======
         adapter = new ShiftAdapter(this,BartenderList);
+>>>>>>> 0a2a154e78ef2b9b5a066e8ab9743f8fde44d249
         gridview.setAdapter(adapter);
         gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         loadBartenderList();
@@ -62,7 +78,7 @@ public class ShiftActivity extends AppCompatActivity {
                 //Save current ServerList to Firebase
                 SparseBooleanArray checkedItems = gridview.getCheckedItemPositions();
                 if (checkedItems != null) {
-                    for (int i=0; i<checkedItems.size(); i++) {
+                    for (int i = 0; i < checkedItems.size(); i++) {
                         if (checkedItems.valueAt(i)) {
                             Bartender newBartender = BartenderList.get(checkedItems.keyAt(i));
                             ActiveBartenderList.add(newBartender.getId());
@@ -77,7 +93,47 @@ public class ShiftActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //Setting up navigation drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navRecyclerView = (RecyclerView) findViewById(R.id.navRecyclerView); // Assigning the RecyclerView Object to the xml View
+
+        navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.bar_icon);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        // And passing the titles,icons,header view name, header view email,
+        // and header view profile picture
+        navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+        navRecyclerView.setLayoutManager(mLayoutManager);
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+        navRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+        //Adding touch listener for RecycleView items
+        navRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        if (position == 1)
+                        {
+                            Toast.makeText(getApplicationContext(), "Launching Analytics", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(position == 2)
+                        {
+                            mDrawerLayout.closeDrawers();
+                        }
+                        else if(position == 3)
+                        {
+                            //Launch Queue Activity
+                            Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                })
+        );
     }
+
 
     //Loads bartender list from Firebase and populates it into gridview
     private void loadBartenderList(){
@@ -112,5 +168,8 @@ public class ShiftActivity extends AppCompatActivity {
             }
         });
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> caa3ea1384fbef418f0238986aea204f0ed2f79f
 }
