@@ -270,7 +270,9 @@ public class ServeActivity extends AppCompatActivity {
                             break;
                         }
                     }
+//                    orderHistory.add(currentDevice);
                     mAdapter.addItem(currentDevice);
+//                    mAdapter.notifyDataSetChanged();
 
                     // update top of queue time for top of the list
                     if (order1.QueuePosition == 1){
