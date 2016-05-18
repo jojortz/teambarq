@@ -53,6 +53,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    </RelativeLayout>
     <!-- Side navigation drawer UI -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/navRecyclerView"

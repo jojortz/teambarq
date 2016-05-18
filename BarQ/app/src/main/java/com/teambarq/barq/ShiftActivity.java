@@ -1,5 +1,6 @@
 package com.teambarq.barq;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Canvas;
@@ -77,7 +78,7 @@ public class ShiftActivity extends AppCompatActivity {
         authData = ref.getAuth();
         BarID = authData.getUid();
 
-        activeListRef = ref.child(BarID).child("ActiveBartenderList").push();
+        activeListRef = ref.child(BarID).child("ActiveBartenderList");
 
         //Setting up Bartender grid view
         gridview = (GridView) findViewById(R.id.bartender_gridview);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -37,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText userInput, passInput;
     Context context = this;
     String usernameStr;
-    Bundle loginBundle;
     Firebase myFirebaseRef;
     private String barID;
 
@@ -48,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 
         //create firebase reference
         myFirebaseRef = new Firebase("https://barq.firebaseio.com/");
+
+        //clear authorization data
+        myFirebaseRef.unauth();
 
 //        // code to change color of status bar (not working properly)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -163,26 +166,28 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), R.string.registerThanks, Toast.LENGTH_SHORT).show();
 
-                        //Create a new bar user in FirebaseBase w/ devices and bartenders
-                        barID = myFirebaseRef.getAuth().getUid();
-                        addBartenders();
-                        addDevices();
+                        //wait for auth data to update to current user
+
+                        myFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
+                            @Override
+                            public void onAuthStateChanged(AuthData authData) {
+                                if (authData != null) {
+                                    //Create a new bar user in FirebaseBase w/ devices and bartenders
+                                    barID = myFirebaseRef.getAuth().getUid();
+                                    addBartenders();
+                                    addDevices();
+
+                                    //create intent for control activity
+                                    Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
+
+                                    //launch control activity
+                                    LoginActivity.this.startActivity(intentControl);
+                                    finish();
+                                }
+                            }
+                        });
 
 
-                        //Create Bundle to pass username to ControlActivity
-                        loginBundle = new Bundle();
-                        //assign the values (key, value pairs)
-                        loginBundle.putString(context.getString(R.string.username), userInput.getText().toString());
-
-                        //create intent for control activity
-                        Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
-
-                        //assign the bundle to the intent
-                        intentControl.putExtras(loginBundle);
-
-                        //launch control activity
-                        LoginActivity.this.startActivity(intentControl);
-                        finish();
                     }
 
                     @Override
@@ -209,16 +214,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onAuthenticated(AuthData authData) {
                         //authenticated successfully
-                        //Create Bundle to pass username to ControlActivity
-                        loginBundle = new Bundle();
-                        //assign the values (key, value pairs)
-                        loginBundle.putString(context.getString(R.string.username), usernameStr);
+
 
                         //create intent for control activity
                         Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
-
-                        //assign the bundle to the intent
-                        intentControl.putExtras(loginBundle);
 
                         //launch control activity
                         LoginActivity.this.startActivity(intentControl);
@@ -304,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Adding Devices to Firebase
     private void addDevices() {
-        Firebase newPostRef = myFirebaseRef.child(barID).child("DeviceList");
+        Firebase newPostRef = myFirebaseRef.child(barID).child("Devices");
         newPostRef.push().setValue(new Device("5ccf7f0fd6e4","Red","Left"));
         newPostRef.push().setValue(new Device("5ccf7f006c6c","Yellow","Center"));
         newPostRef.push().setValue(new Device("18fe34d45db8","Blue","Right"));
