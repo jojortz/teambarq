@@ -19,6 +19,8 @@ package com.teambarq.barq;
         import android.widget.TextView;
         import android.os.Handler;
         import android.widget.Toast;
+
+        import com.firebase.client.AuthData;
         import com.firebase.client.ChildEventListener;
         import com.firebase.client.DataSnapshot;
         import com.firebase.client.Firebase;
@@ -37,7 +39,8 @@ public class ServeActivity extends AppCompatActivity {
     TextView upNextTimer, upNextHeader;
     Context context = this;
     Firebase ref = new Firebase("https://barq.firebaseio.com/");
-    Firebase user = ref.child("Bar1");
+    private AuthData authData;
+    Firebase user;
     ArrayList<Device> devices;
     ArrayList<Device> orderHistory;
     ArrayList<String> currentServers;
@@ -50,11 +53,18 @@ public class ServeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serve);
+
+        //Initializing Firebase database for HistoryActivity
+        authData = ref.getAuth();
+        user = ref.child("authData.getUid()");
+
         //ensure screen doesn't go to sleep during activity
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         //set imageView of bar layout
         ImageView barLayoutView = (ImageView) findViewById(R.id.barLayoutImage);
         Picasso.with(context).load(R.drawable.barlayoutublank).into(barLayoutView);
+
         //initialize location circles
         Resources res = getResources();
         final Drawable drawable1 = res.getDrawable(R.drawable.locationcircle1);
