@@ -47,7 +47,7 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> 
             case "Red":
                 holder.Location.setBackgroundResource(R.color.redorange);
                 break;
-            case "Green":
+            case "Yellow":
                 holder.Location.setBackgroundResource(R.color.softyellow);
                 break;
         }

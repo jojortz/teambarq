@@ -1,6 +1,5 @@
 package com.teambarq.barq;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Canvas;
@@ -9,8 +8,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
@@ -28,6 +30,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShiftActivity extends AppCompatActivity {
     private ArrayList<Bartender> BartenderList;
@@ -41,6 +45,14 @@ public class ShiftActivity extends AppCompatActivity {
     private ShiftAdapter adapter;
     Context context = this;
 
+    //Navigation drawer
+    private DrawerLayout mDrawerLayout;
+    private RecyclerView navRecyclerView;
+    RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
+    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+
+    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +79,7 @@ public class ShiftActivity extends AppCompatActivity {
 
         activeListRef = ref.child(BarID).child("ActiveBartenderList").push();
 
+        //Setting up Bartender grid view
         gridview = (GridView) findViewById(R.id.bartender_gridview);
         adapter = new ShiftAdapter(this,BartenderList);
         gridview.setAdapter(adapter);
@@ -80,7 +93,7 @@ public class ShiftActivity extends AppCompatActivity {
                 //Save current ServerList to Firebase
                 SparseBooleanArray checkedItems = gridview.getCheckedItemPositions();
                 if (checkedItems != null) {
-                    for (int i=0; i<checkedItems.size(); i++) {
+                    for (int i = 0; i < checkedItems.size(); i++) {
                         if (checkedItems.valueAt(i)) {
                             Bartender newBartender = BartenderList.get(checkedItems.keyAt(i));
                             ActiveBartenderList.add(newBartender.getId());
@@ -110,6 +123,45 @@ public class ShiftActivity extends AppCompatActivity {
                 //img.getBackground().setColorFilter(getResources().getColor(R.color.redorange), PorterDuff.Mode.DARKEN);
             }
         });
+
+        //Setting up navigation drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navRecyclerView = (RecyclerView) findViewById(R.id.navRecyclerView); // Assigning the RecyclerView Object to the xml View
+
+        navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.bar_icon);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        // And passing the titles,icons,header view name, header view email,
+        // and header view profile picture
+        navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+        navRecyclerView.setLayoutManager(mLayoutManager);
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+        navRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+        //Adding touch listener for RecycleView items
+        navRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        if (position == 1)
+                        {
+                            Toast.makeText(getApplicationContext(), "Launching Analytics", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(position == 2)
+                        {
+                            mDrawerLayout.closeDrawers();
+                        }
+                        else if(position == 3)
+                        {
+                            //Launch Queue Activity
+                            Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                })
+        );
     }
 
     //Loads bartender list from Firebase and populates it into gridview
@@ -143,9 +195,7 @@ public class ShiftActivity extends AppCompatActivity {
             public void onCancelled(FirebaseError error) {
 
             }
+
         });
     }
-
-
-
 }

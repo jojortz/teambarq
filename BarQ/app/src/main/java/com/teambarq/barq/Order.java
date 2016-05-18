@@ -14,9 +14,9 @@ public class Order {
 
     public Order() {}
 
-    public Order(String MACid,List<String> Servers,int QueuePosition){
+    public Order(String MACid,int QueuePosition){
         this.MACid = MACid;
-        this.Servers = Servers;
+//        this.Servers = Servers;
         this.QueuePosition = QueuePosition;
         //Calendar c = Calendar.getInstance();
         //SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
