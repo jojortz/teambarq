@@ -16,6 +16,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShiftActivity extends AppCompatActivity {
     private ArrayList<Bartender> BartenderList;
@@ -33,6 +35,8 @@ public class ShiftActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift);
+
+
 
         //Initializing Bartender arrays
         BartenderList = new ArrayList<>();
@@ -108,7 +112,5 @@ public class ShiftActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }
