@@ -1,174 +1,21 @@
-//package com.teambarq.barq;
-//
-//import android.app.AlertDialog;
-//import android.content.Context;
-//import android.content.DialogInterface;
-//import android.content.Intent;
-//import android.support.v7.app.AppCompatActivity;
-//import android.os.Bundle;
-//import android.util.Log;
-//import android.view.LayoutInflater;
-//import android.view.View;
-//import android.widget.Button;
-//import android.widget.EditText;
-//import android.widget.Toast;
-//
-//import com.firebase.client.AuthData;
-//import com.firebase.client.Firebase;
-//import com.firebase.client.FirebaseError;
-//
-//import java.util.ArrayList;
-//import java.util.Map;
-//
-//public class LoginActivity extends AppCompatActivity {
-//    private Button loginButton;
-//    private EditText txtUsername;
-//    private EditText txtPassword;
-//    private Button newUserButton;
-//    private AlertDialog.Builder userDialogBuilder;
-//    private EditText txtNewUsername;
-//    private EditText txtNewPassword;
-//    private Firebase ref;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_login);
-//
-//        ref = new Firebase("https://barq.firebaseio.com/");
-//
-//        //Initializing login button
-//        loginButton = (Button) findViewById(R.id.login_Button);
-//        loginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final String thisUsername = txtUsername.getText().toString();
-//                final String thisPassword = txtPassword.getText().toString();
-//
-//                ref.authWithPassword(thisUsername, thisPassword,
-//                        new Firebase.AuthResultHandler() {
-//                            @Override
-//                            public void onAuthenticated(AuthData authData) {
-//                                ref.child("Bars").child(authData.getUid()).child("provider").setValue(authData.getProvider());
-//                                //Launch Shift activity
-//                                Intent intent = new Intent(LoginActivity.this, ShiftActivity.class);
-//                                startActivity(intent);
-//                                finish();
-//                            }
-//                            @Override
-//                            public void onAuthenticationError(FirebaseError error) {
-//                                //Display toast to indicate invalid login
-//                                int errorToast;
-//                                Context context = getApplicationContext();
-//                                int duration = Toast.LENGTH_SHORT;
-//                                if (error.toString().matches("FirebaseError: The specified password is incorrect.")){
-//                                    errorToast = R.string.incorrect_password;
-//                                }else if(error.toString().matches("FirebaseError: The specified user does not exist.")){
-//                                    errorToast = R.string.invalid_user;
-//                                }else if ((thisUsername.matches("")) && (thisPassword.matches(""))) {
-//                                    errorToast = R.string.missing_username_and_password;
-//                                }else if(txtUsername.getText().toString().matches("")){
-//                                    errorToast = R.string.missing_username;
-//                                }else if(txtPassword.getText().toString().matches("")){
-//                                    errorToast = R.string.missing_password;
-//                                }else{
-//                                    errorToast = R.string.failed_authentication;
-//                                }
-//                                Toast.makeText(context,errorToast, duration).show();
-//                                Log.e("Error authenticating", error.toString());
-//                            }
-//                        });
-//
-//            }
-//        });
-//
-//        //Initializing new user button
-//        newUserButton = (Button) findViewById(R.id.newUser_Button);
-//        newUserButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                createNewUserDialog();
-//                userDialogBuilder.show();
-//            }
-//        });
-//
-//        //Find TextViews
-//        txtUsername = (EditText) findViewById(R.id.username_EditText);
-//        txtPassword = (EditText) findViewById(R.id.password_EditText);
-//    }
-//
-//    public void createNewUserDialog() {
-//        userDialogBuilder = new AlertDialog.Builder(this);
-//        userDialogBuilder.setTitle(getString(R.string.new_user_dialog_title));
-//
-//        LayoutInflater inflater = this.getLayoutInflater();
-//
-//        // Inflate and set the layout for the dialog
-//        // Pass null as the parent view because its going in the dialog layout
-//        final View view = inflater.inflate(R.layout.dialog_new_user, null);
-//        userDialogBuilder.setView(view);
-//
-//        //Find Bike ID EditText
-//        txtNewUsername = (EditText) view.findViewById(R.id.newUsername_editText);
-//        txtNewPassword = (EditText) view.findViewById(R.id.newPassword_editText);
-//
-//
-//        // set positive button
-//        userDialogBuilder.setPositiveButton(R.string.new_user_dialog_positive, new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int id) {
-//                //Toast variables to indicate invalid registration
-//                String toastString;
-//                Context context = getApplicationContext();
-//                int duration = Toast.LENGTH_SHORT;
-//
-//                String newUsername = txtNewUsername.getText().toString();
-//                String newPassword = txtNewPassword.getText().toString();
-//                ref.createUser(newUsername, newPassword, new Firebase.ValueResultHandler<Map<String, Object>>() {
-//                    @Override
-//                    public void onSuccess(Map<String, Object> result) {
-//                        //See next slide
-//                    }
-//                    @Override
-//                    public void onError(FirebaseError firebaseError) {
-//                        int errorToast;
-//                        if (firebaseError.toString().matches("FirebaseError: The specified email address is already in use.")){
-//                            errorToast = R.string.new_user_username_used;
-//                        }else if(firebaseError.toString().matches("FirebaseError: The specified email address is invalid.")){
-//                            errorToast = R.string.new_user_invalid_email;
-//                        }else if (firebaseError.toString().matches("FirebaseError: The specified password is incorrect.")){
-//                            errorToast = R.string.new_user_invalid_email;
-//                        }else{
-//                            errorToast = R.string.new_user_creation_error;
-//                        }
-//                        Toast.makeText(getApplicationContext(), errorToast,Toast.LENGTH_SHORT).show();
-//                        Log.e("Error creating user", firebaseError.toString());
-//                    }
-//                });
-//            }
-//        });
-//
-//        // set negative button
-//        userDialogBuilder.setNegativeButton(R.string.new_user_dialog_negative, new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int id) {
-//                // cancel the alert box
-//                dialog.cancel();
-//            }
-//        });
-//    }
-//}
 package com.teambarq.barq;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import java.util.Map;
 
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -199,22 +46,12 @@ public class LoginActivity extends AppCompatActivity {
         //create firebase reference
         myFirebaseRef = new Firebase("https://barq.firebaseio.com/");
 
-//        Window window = this.getWindow();
-//
-//// clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//
-//// finally change the color
-//        window.setStatusBarColor(this.getResources().getColor(R.color.lipRed));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.bluegray));
-        }
+//        // code to change color of status bar (not working properly)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.royalblue));
+//        }
 
 
 
@@ -224,6 +61,19 @@ public class LoginActivity extends AppCompatActivity {
         passInput = (EditText)findViewById(R.id.password);
         nextButton = (Button) findViewById(R.id.nextButton);
         registerButton = (Button) findViewById(R.id.registerButton);
+
+        //set fonts
+        Typeface gothamExtraLight =Typeface.createFromAsset(getAssets(),"fonts/gothamExtraLight.TTF");
+        Typeface gothamBold =Typeface.createFromAsset(getAssets(),"fonts/gothamBold.TTF");
+        loginButton.setTypeface(gothamBold);
+        userInput.setTypeface(gothamExtraLight);
+        passInput.setTypeface(gothamExtraLight);
+        nextButton.setTypeface(gothamBold);
+        registerButton.setTypeface(gothamBold);
+
+        //hide keyboard if click off edittext
+        setupParent(findViewById(R.id.loginRelativeLayout));
+
 
         //when next button is pressed determine if already a user or need to register
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -244,14 +94,20 @@ public class LoginActivity extends AppCompatActivity {
                         System.out.println("UserDoesNotExist: " + FirebaseError.USER_DOES_NOT_EXIST);
                         System.out.println("InvalidPassword: " + FirebaseError.INVALID_PASSWORD);
                         System.out.println("NetworkError: " + FirebaseError.NETWORK_ERROR);
+                        System.out.println("InvalidEmail: " + FirebaseError.INVALID_EMAIL);
                         System.out.println("error: " + firebaseError.getCode());
 
                         switch (firebaseError.getCode()) {
 
+                            case FirebaseError.INVALID_EMAIL:
+                                // toast to input email
+                                Toast.makeText(getApplicationContext(), R.string.invalidEmail, Toast.LENGTH_SHORT).show();
+                                break;
+
                             //show user to register buttons
                             case FirebaseError.USER_DOES_NOT_EXIST:
                                 // have user register
-                                Toast.makeText(getApplicationContext(), R.string.registerToast, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), R.string.registerToast, Toast.LENGTH_SHORT).show();
                                 passInput.setVisibility(View.VISIBLE);
                                 passInput.setHint(R.string.setPasswordHint);
                                 registerButton.setVisibility(View.VISIBLE);
@@ -317,13 +173,14 @@ public class LoginActivity extends AppCompatActivity {
 
                         //launch control activity
                         LoginActivity.this.startActivity(intentControl);
+                        finish();
                     }
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
                         // there was an error
                         Log.i("onError", "Error creating firebase user");
-                        Toast.makeText(getApplicationContext(), R.string.registerError, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
                         passInput.setText("");
                     }
                 });
@@ -356,6 +213,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         //launch control activity
                         LoginActivity.this.startActivity(intentControl);
+                        //make it so you cant go back to login activity
+                        finish();
                     }
 
                     @Override
@@ -377,5 +236,31 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
+
+    }
+
+    protected void setupParent(View view) {
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard();
+                    return false;
+                }
+            });
+        }
+        //If a layout container, iterate over children
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupParent(innerView);
+            }
+        }
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 }

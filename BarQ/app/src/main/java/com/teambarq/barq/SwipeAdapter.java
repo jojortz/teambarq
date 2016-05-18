@@ -39,13 +39,13 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> 
         holder.Location.setText(device1.Location);
         switch(device1.Color) {
             case "Blue":
-                holder.Location.setBackgroundColor(Color.parseColor("#FF0000FF"));
+                holder.Location.setBackgroundResource(R.color.bluegreen);
                 break;
             case "Red":
-                holder.Location.setBackgroundColor(Color.parseColor("#FFFF0000"));
+                holder.Location.setBackgroundResource(R.color.redorange);
                 break;
             case "Green":
-                holder.Location.setBackgroundColor(Color.parseColor("#FF00FF00"));
+                holder.Location.setBackgroundResource(R.color.softyellow);
                 break;
         }
         holder.coordinatorLayout.setOnServeListener(new OnItemServe(position));

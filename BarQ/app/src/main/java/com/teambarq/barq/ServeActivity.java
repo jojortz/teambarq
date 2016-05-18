@@ -3,6 +3,7 @@ package com.teambarq.barq;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class ServeActivity extends AppCompatActivity {
 
     private long topQueueTime = 0; //initialize
-    TextView upNextTimer;
+    TextView upNextTimer, upNextHeader;
     Context context = this;
     Firebase ref = new Firebase("https://barq.firebaseio.com/");
     Firebase user = ref.child("Bar1");
@@ -142,6 +143,14 @@ public class ServeActivity extends AppCompatActivity {
         //create handler for up next time
         final Handler timerHandler = new Handler();
         upNextTimer = (TextView) findViewById(R.id.upNextTimerView);
+        upNextHeader = (TextView) findViewById(R.id.upNextTextView);
+
+        //set fonts
+        Typeface gothamMedium =Typeface.createFromAsset(getAssets(),"fonts/gothamMedium.TTF");
+        Typeface gothamBold =Typeface.createFromAsset(getAssets(),"fonts/gothamBold.TTF");
+        Typeface gothamRegular =Typeface.createFromAsset(getAssets(),"fonts/gothamRegular.TTF");
+        upNextTimer.setTypeface(gothamMedium);
+        upNextHeader.setTypeface(gothamRegular);
 
         //update clock
         Runnable timerRunnable = new Runnable() {
@@ -149,7 +158,7 @@ public class ServeActivity extends AppCompatActivity {
             public void run() {
 
                 if (topQueueTime == 0){
-                    upNextTimer.setText("0:00");
+                    upNextTimer.setText(R.string.waitingTimer);
                 } else {
                     long deltaTime = System.currentTimeMillis() - topQueueTime;
                     String formattedTime = getFormattedTime(deltaTime);

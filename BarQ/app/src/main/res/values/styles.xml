@@ -6,8 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/gray</item>
-        <item name="colorControlActivated">@color/darkgray</item>
-        <item name="colorControlHighlight">@color/darkgray</item>
+        <item name="colorControlActivated">@color/redorange</item>
+        <item name="colorControlHighlight">@color/redorange</item>
 
 
     </style>

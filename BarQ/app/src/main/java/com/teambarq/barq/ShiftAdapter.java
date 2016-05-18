@@ -14,11 +14,11 @@ import java.util.ArrayList;
 /**
  * Created by jojortz on 4/6/2016.
  */
-public class MyAdapter extends ArrayAdapter<Bartender>{
+public class ShiftAdapter extends ArrayAdapter<Bartender>{
     Context thisContext;
     private static LayoutInflater inflater;
 
-    public MyAdapter (Context context, ArrayList<Bartender> bartenderList){
+    public ShiftAdapter(Context context, ArrayList<Bartender> bartenderList){
         super(context, 0, bartenderList);
         thisContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
