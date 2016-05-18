@@ -8,13 +8,15 @@ public class Bartender {
     String profilePic;
     String id;
 
-    public Bartender(){
-    }
-
     public Bartender(String name,String profilePic){
         this.name = name;
         this.profilePic = profilePic;
     }
+
+    public Bartender(){
+    }
+
+
     public String getName(){
         return this.name;
     }

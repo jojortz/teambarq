@@ -36,18 +36,18 @@ package com.teambarq.barq;
 
 public class ServeActivity extends AppCompatActivity {
     private long topQueueTime = 0; //initialize
-    TextView upNextTimer, upNextHeader;
+    private TextView upNextTimer, upNextHeader;
     Context context = this;
     Firebase ref = new Firebase("https://barq.firebaseio.com/");
     private AuthData authData;
-    Firebase user;
-    ArrayList<Device> devices;
-    ArrayList<Device> orderHistory;
-    ArrayList<String> currentServers;
+    private Firebase user;
+    private ArrayList<Device> devices;
+    private ArrayList<Device> orderHistory;
+    private ArrayList<String> currentServers;
     int pos = 0;
     SwipeAdapter mAdapter;
-    private static String DEVICEMAC1 = "5ccf7f0fd6e4"; //center, green
-    private static String DEVICEMAC2 = "5ccf7f006c6c"; //left, red
+    private static String DEVICEMAC2 = "5ccf7f0fd6e4"; //center, yellow
+    private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
     private static String DEVICEMAC3 = "18fe34d45db8"; //right, blue
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,12 @@ public class ServeActivity extends AppCompatActivity {
 
         //Initializing Firebase database for HistoryActivity
         authData = ref.getAuth();
-        user = ref.child("authData.getUid()");
+        String authUid = authData.getUid();
+        //13d48831-3ce1-45bd-bd99-d4fb13a9106c
+
+        //TODO Add end shift button
+        Log.d("AuthUID", authUid);
+        user = ref.child(authUid);
 
         //ensure screen doesn't go to sleep during activity
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -177,7 +182,7 @@ public class ServeActivity extends AppCompatActivity {
                 for (DataSnapshot postSnapshot : snapshot.child("Devices").getChildren()) {
                     Device device1 = postSnapshot.getValue(Device.class);
                     devices.add(device1);
-//                    Log.e("FB", "Adding device data now");
+                    Log.e("FB", "Adding device data now");
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.child("ActiveBartenderList").getChildren()) {
@@ -348,7 +353,7 @@ public class ServeActivity extends AppCompatActivity {
                 final Device d1 = mAdapter.getItem(position);
                 addToAllOrdersAndDelete(d1.MACid);
                 position=position+1;
-                Toast.makeText(ServeActivity.this, "Item served at position :" + position, Toast.LENGTH_LONG).show();
+                //Toast.makeText(ServeActivity.this, "Item served at position :" + position, Toast.LENGTH_LONG).show();
             }
             @Override
             public void onItemDeleteAction(int position) {
@@ -359,6 +364,7 @@ public class ServeActivity extends AppCompatActivity {
 //                Log.e("FB", "Deleted from FB");
             }
         });
+
 
     }
     //function to add location circles base on MAC id

@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import android.util.Log;
@@ -35,8 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText userInput, passInput;
     Context context = this;
     String usernameStr;
-    Bundle loginBundle;
     Firebase myFirebaseRef;
+    private String barID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 
         //create firebase reference
         myFirebaseRef = new Firebase("https://barq.firebaseio.com/");
+
+        //clear authorization data
+        myFirebaseRef.unauth();
 
 //        // code to change color of status bar (not working properly)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -160,20 +166,28 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), R.string.registerThanks, Toast.LENGTH_SHORT).show();
 
-                        //Create Bundle to pass username to ControlActivity
-                        loginBundle = new Bundle();
-                        //assign the values (key, value pairs)
-                        loginBundle.putString(context.getString(R.string.username), userInput.getText().toString());
+                        //wait for auth data to update to current user
 
-                        //create intent for control activity
-                        Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
+                        myFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
+                            @Override
+                            public void onAuthStateChanged(AuthData authData) {
+                                if (authData != null) {
+                                    //Create a new bar user in FirebaseBase w/ devices and bartenders
+                                    barID = myFirebaseRef.getAuth().getUid();
+                                    addBartenders();
+                                    addDevices();
 
-                        //assign the bundle to the intent
-                        intentControl.putExtras(loginBundle);
+                                    //create intent for control activity
+                                    Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
 
-                        //launch control activity
-                        LoginActivity.this.startActivity(intentControl);
-                        finish();
+                                    //launch control activity
+                                    LoginActivity.this.startActivity(intentControl);
+                                    finish();
+                                }
+                            }
+                        });
+
+
                     }
 
                     @Override
@@ -200,16 +214,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onAuthenticated(AuthData authData) {
                         //authenticated successfully
-                        //Create Bundle to pass username to ControlActivity
-                        loginBundle = new Bundle();
-                        //assign the values (key, value pairs)
-                        loginBundle.putString(context.getString(R.string.username), usernameStr);
+
 
                         //create intent for control activity
                         Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
-
-                        //assign the bundle to the intent
-                        intentControl.putExtras(loginBundle);
 
                         //launch control activity
                         LoginActivity.this.startActivity(intentControl);
@@ -219,13 +227,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
-                        System.out.println("error: " + firebaseError.INVALID_PASSWORD);
+                        System.out.println("error: " + FirebaseError.INVALID_PASSWORD);
                         System.out.println("error: " + firebaseError.getCode());
 
                         //something went wrong
                         Log.i("onAuthenticatedError", "Error authenticating");
 
-                        if (firebaseError.getCode() == firebaseError.INVALID_PASSWORD) {
+                        if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD) {
                             passInput.setText("");
                             //display toast for incorrect login attempt
                             Toast.makeText(getApplicationContext(), R.string.incorrectLogin, Toast.LENGTH_SHORT).show();
@@ -262,5 +270,42 @@ public class LoginActivity extends AppCompatActivity {
     private void hideSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    //Adding Bartenders to Firebase
+    public void addBartenders() {
+        Firebase newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Tara", "https://www.jordanmatter.com/images/gallery/Tara_Westwood.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Jojo", "https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/10487280_10207376636688276_3277337388999426495_n.jpg?oh=5a65fb3a25ff4d777d14e7298ff7f880&oe=57E27F4D"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Alan", "https://www.jordanmatter.com/images/gallery/Alan_Cumming.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Mallory", "https://www.jordanmatter.com/images/gallery/Mallory_Moye.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Penn", "https://www.jordanmatter.com/images/gallery/penn-jillette.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Abena", "https://www.jordanmatter.com/images/gallery/Abena_Koomson.jpg"));
+        updateBartenderID(newPostRef);
+    }
+
+    public void updateBartenderID(Firebase newPostRef) {
+        String postId = newPostRef.getKey();
+        Map<String, Object> myMap1 = new HashMap<String, Object>();
+        myMap1.put("id", postId);
+        newPostRef.updateChildren(myMap1);
+    }
+
+    //Adding Devices to Firebase
+    private void addDevices() {
+        Firebase newPostRef = myFirebaseRef.child(barID).child("Devices");
+        newPostRef.push().setValue(new Device("5ccf7f0fd6e4","Red","Left"));
+        newPostRef.push().setValue(new Device("5ccf7f006c6c","Yellow","Center"));
+        newPostRef.push().setValue(new Device("18fe34d45db8","Blue","Right"));
     }
 }
