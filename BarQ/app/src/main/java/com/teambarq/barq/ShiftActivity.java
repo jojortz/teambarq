@@ -1,13 +1,25 @@
 package com.teambarq.barq;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.Typeface;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -27,12 +39,22 @@ public class ShiftActivity extends AppCompatActivity {
     private AuthData authData;
     private Button createShiftButton;
     private ShiftAdapter adapter;
+    Context context = this;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift);
+
+        //set font for title
+        TextView shiftTitle = (TextView) findViewById(R.id.shiftTitle_textView);
+        createShiftButton = (Button) findViewById(R.id.newShift_Button);
+        //set fonts
+        Typeface gothamRegular =Typeface.createFromAsset(getAssets(),"fonts/gothamRegular.TTF");
+        Typeface gothamBold =Typeface.createFromAsset(getAssets(),"fonts/gothamBold.TTF");
+        shiftTitle.setTypeface(gothamRegular);
+        createShiftButton.setTypeface(gothamBold);
 
         //Initializing Bartender arrays
         BartenderList = new ArrayList<>();
@@ -43,7 +65,7 @@ public class ShiftActivity extends AppCompatActivity {
         authData = ref.getAuth();
         BarID = authData.getUid();
 
-        activeListRef = ref.child("Bars").child(BarID).child("ActiveBartenderList").push();
+        activeListRef = ref.child(BarID).child("ActiveBartenderList").push();
 
         gridview = (GridView) findViewById(R.id.bartender_gridview);
         adapter = new ShiftAdapter(this,BartenderList);
@@ -68,9 +90,24 @@ public class ShiftActivity extends AppCompatActivity {
 
                 //Add active list to Firebase
                 activeListRef.setValue(ActiveBartenderList);
+
                 //Launch Queue Activity
                 Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        //TODO change transparent color for gridview
+        //TODO highlight only the circle image on click
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RoundedImageView img = (RoundedImageView)view.findViewById(R.id.bartender_imageView);
+                //img.setVisibility(View.INVISIBLE);
+                //img.getDrawable().setColorFilter(getResources().getColor(R.color.redorange), PorterDuff.Mode.SRC_ATOP);
+                //color = new PorterDuffColorFilter(ResourcesCompat.getColor(context.getResources(), resId))
+                //img.setColorFilter(Color.argb(255, 255, 255, 255));
+                //img.getBackground().setColorFilter(getResources().getColor(R.color.redorange), PorterDuff.Mode.DARKEN);
             }
         });
     }
@@ -78,7 +115,7 @@ public class ShiftActivity extends AppCompatActivity {
     //Loads bartender list from Firebase and populates it into gridview
     private void loadBartenderList(){
         BartenderList.clear();
-        ref.child("Bars").child(BarID).child("BartenderList").addChildEventListener(new ChildEventListener() {
+        ref.child(BarID).child("BartenderList").addChildEventListener(new ChildEventListener() {
             // Retrieve new posts as they are added to the database
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {

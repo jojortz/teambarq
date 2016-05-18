@@ -406,7 +406,7 @@ public class ServeActivity extends AppCompatActivity {
                     }
                 });
                 position=position+1;
-                Toast.makeText(ServeActivity.this, "Item served at position :" + position, Toast.LENGTH_LONG).show();
+                //Toast.makeText(ServeActivity.this, "Item served at position :" + position, Toast.LENGTH_LONG).show();
             }
 
             @Override

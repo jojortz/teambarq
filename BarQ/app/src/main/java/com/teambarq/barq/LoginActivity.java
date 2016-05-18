@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import android.util.Log;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     String usernameStr;
     Bundle loginBundle;
     Firebase myFirebaseRef;
+    private String barID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +163,12 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), R.string.registerThanks, Toast.LENGTH_SHORT).show();
 
+                        //Create a new bar user in FirebaseBase w/ devices and bartenders
+                        barID = myFirebaseRef.getAuth().getUid();
+                        addBartenders();
+                        addDevices();
+
+
                         //Create Bundle to pass username to ControlActivity
                         loginBundle = new Bundle();
                         //assign the values (key, value pairs)
@@ -262,5 +271,42 @@ public class LoginActivity extends AppCompatActivity {
     private void hideSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    //Adding Bartenders to Firebase
+    public void addBartenders() {
+        Firebase newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Tara", "https://www.jordanmatter.com/images/gallery/Tara_Westwood.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Jojo", "https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/10487280_10207376636688276_3277337388999426495_n.jpg?oh=5a65fb3a25ff4d777d14e7298ff7f880&oe=57E27F4D"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Alan", "https://www.jordanmatter.com/images/gallery/Alan_Cumming.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Mallory", "https://www.jordanmatter.com/images/gallery/Mallory_Moye.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Penn", "https://www.jordanmatter.com/images/gallery/penn-jillette.jpg"));
+        updateBartenderID(newPostRef);
+        newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
+        newPostRef.setValue(new Bartender("Abena", "https://www.jordanmatter.com/images/gallery/Abena_Koomson.jpg"));
+        updateBartenderID(newPostRef);
+    }
+
+    public void updateBartenderID(Firebase newPostRef) {
+        String postId = newPostRef.getKey();
+        Map<String, Object> myMap1 = new HashMap<String, Object>();
+        myMap1.put("id", postId);
+        newPostRef.updateChildren(myMap1);
+    }
+
+    //Adding Devices to Firebase
+    private void addDevices() {
+        Firebase newPostRef = myFirebaseRef.child(barID).child("DeviceList");
+        newPostRef.push().setValue(new Device("5ccf7f0fd6e4","Red","Left"));
+        newPostRef.push().setValue(new Device("5ccf7f006c6c","Yellow","Center"));
+        newPostRef.push().setValue(new Device("18fe34d45db8","Blue","Right"));
     }
 }

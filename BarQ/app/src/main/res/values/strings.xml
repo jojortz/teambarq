@@ -22,8 +22,8 @@
     <string name="invalidEmail">Invalid email. Check email and try again.</string>
 
     <!-- Shift Activity-->
-    <string name="shift_activity_title">SHIFT CREATOR</string>
-    <string name="new_shift_button">Create new shift</string>
+    <string name="shift_activity_title">Select the Shift</string>
+    <string name="newShiftButton">Start Pouring!</string>
 
     <!-- Serve Activity-->
     <string name="upNext">Up Next</string>

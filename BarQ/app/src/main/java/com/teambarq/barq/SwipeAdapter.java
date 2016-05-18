@@ -1,6 +1,7 @@
 package com.teambarq.barq;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import butterknife.Bind;
@@ -37,6 +39,7 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Device device1 = getItem(position);
         holder.Location.setText(device1.Location);
+
         switch(device1.Color) {
             case "Blue":
                 holder.Location.setBackgroundResource(R.color.bluegreen);
@@ -113,6 +116,7 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        //TODO: change font for location
         public CoordinatorLayout coordinatorLayout;
         @Bind(R.id.Location)
         public TextView Location;

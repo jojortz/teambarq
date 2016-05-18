@@ -6,10 +6,11 @@
 
     <com.teambarq.barq.RoundedImageView
         android:id="@+id/bartender_imageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/bar_icon"/>
+
+        />
 
     <TextView
         android:id="@+id/bartender_textView"

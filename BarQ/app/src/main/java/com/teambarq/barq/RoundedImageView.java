@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -27,6 +29,7 @@ public class RoundedImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
+
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -45,6 +48,9 @@ public class RoundedImageView extends ImageView {
         int w = getWidth(), h = getHeight();
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
+
+        //Paint paint = new Paint();
+        //paint.setColorFilter(new ColorMatrixColorFilter(getColorMatrix()));
         canvas.drawBitmap(roundBitmap, 0, 0, null);
 
     }
@@ -80,4 +86,13 @@ public class RoundedImageView extends ImageView {
 
         return output;
     }
+
+    //function to transform image to black and white
+    private ColorMatrix getColorMatrix() {
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(0);
+        return colorMatrix;
+    }
+
+
 }
