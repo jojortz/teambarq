@@ -13,8 +13,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="landscape"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,8 +24,10 @@
         <activity
             android:name=".ShiftActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".ServeActivity"
-            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".ServeActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".AnalyticsActivity"></activity>
     </application>
 
 </manifest>
