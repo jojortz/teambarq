@@ -20,6 +20,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShiftActivity extends AppCompatActivity {
     private ArrayList<Bartender> BartenderList;
@@ -46,6 +48,8 @@ public class ShiftActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift);
 
+
+
         //Initializing Bartender arrays
         BartenderList = new ArrayList<>();
         ActiveBartenderList = new ArrayList<>();
@@ -61,6 +65,7 @@ public class ShiftActivity extends AppCompatActivity {
         gridview = (GridView) findViewById(R.id.bartender_gridview);
 
         adapter = new ShiftAdapter(this,BartenderList);
+
         gridview.setAdapter(adapter);
         gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         loadBartenderList();
@@ -111,22 +116,15 @@ public class ShiftActivity extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         if (position == 1)
                         {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-                            //Launch Analytics Activity
-                            Intent intent = new Intent(ShiftActivity.this, AnalyticsActivity.class);
-                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(), "Launching Analytics", Toast.LENGTH_SHORT).show();
                         }
                         else if(position == 2)
                         {
-                            //Close navigation drawer
                             mDrawerLayout.closeDrawers();
                         }
                         else if(position == 3)
                         {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-                            //Launch Serve Activity
+                            //Launch Queue Activity
                             Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                             startActivity(intent);
                         }

@@ -11,6 +11,10 @@ public class Bartender {
     public Bartender(){
     }
 
+    public Bartender(String name,String profilePic){
+        this.name = name;
+        this.profilePic = profilePic;
+    }
     public String getName(){
         return this.name;
     }
