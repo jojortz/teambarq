@@ -227,13 +227,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
-                        System.out.println("error: " + firebaseError.INVALID_PASSWORD);
+                        System.out.println("error: " + FirebaseError.INVALID_PASSWORD);
                         System.out.println("error: " + firebaseError.getCode());
 
                         //something went wrong
                         Log.i("onAuthenticatedError", "Error authenticating");
 
-                        if (firebaseError.getCode() == firebaseError.INVALID_PASSWORD) {
+                        if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD) {
                             passInput.setText("");
                             //display toast for incorrect login attempt
                             Toast.makeText(getApplicationContext(), R.string.incorrectLogin, Toast.LENGTH_SHORT).show();

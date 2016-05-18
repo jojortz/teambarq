@@ -59,7 +59,7 @@ public class ServeActivity extends AppCompatActivity {
         String authUid = authData.getUid();
         //13d48831-3ce1-45bd-bd99-d4fb13a9106c
 
-
+        //TODO Add end shift button
         Log.d("AuthUID", authUid);
         user = ref.child(authUid);
 
