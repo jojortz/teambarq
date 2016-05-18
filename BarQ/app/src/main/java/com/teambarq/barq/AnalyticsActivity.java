@@ -24,7 +24,7 @@ public class AnalyticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analytics);
 
-        //Setting up navigation drawer);
+        //Setting up navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.analytics_drawerLayout);
 
         navRecyclerView = (RecyclerView) findViewById(R.id.navRecyclerView); // Assigning the RecyclerView Object to the xml View
