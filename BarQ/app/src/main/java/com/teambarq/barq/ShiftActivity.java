@@ -148,15 +148,22 @@ public class ShiftActivity extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         if (position == 1)
                         {
-                            Toast.makeText(getApplicationContext(), "Launching Analytics", Toast.LENGTH_SHORT).show();
+                            //Close navigation drawer
+                            mDrawerLayout.closeDrawers();
+                            //Launch Analytics Activity
+                            Intent intent = new Intent(ShiftActivity.this, AnalyticsActivity.class);
+                            startActivity(intent);
                         }
                         else if(position == 2)
                         {
+                            //Close navigation drawer
                             mDrawerLayout.closeDrawers();
                         }
                         else if(position == 3)
                         {
-                            //Launch Queue Activity
+                            //Close navigation drawer
+                            mDrawerLayout.closeDrawers();
+                            //Launch Serve Activity
                             Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                             startActivity(intent);
                         }
