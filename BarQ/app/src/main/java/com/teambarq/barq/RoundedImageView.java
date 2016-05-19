@@ -30,6 +30,11 @@ public class RoundedImageView extends ImageView {
     }
 
 
+    public void changeColor() {
+        // change the color
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
 

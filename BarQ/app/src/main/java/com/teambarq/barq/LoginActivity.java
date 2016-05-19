@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     String usernameStr;
     Firebase myFirebaseRef;
     private String barID;
-
+    //TODO debounce buttons
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

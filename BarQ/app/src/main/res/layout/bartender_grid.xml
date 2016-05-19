@@ -9,6 +9,7 @@
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_centerHorizontal="true"
+        android:alpha="0.3"
 
         />
 
@@ -16,6 +17,7 @@
         android:id="@+id/bartender_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/lightGrey"
         android:layout_below="@id/bartender_imageView"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_centerHorizontal="true"

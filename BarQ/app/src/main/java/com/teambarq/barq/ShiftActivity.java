@@ -117,6 +117,18 @@ public class ShiftActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RoundedImageView img = (RoundedImageView)view.findViewById(R.id.bartender_imageView);
+                TextView name = (TextView) view.findViewById(R.id.bartender_textView);
+
+                float alphaVal = img.getAlpha();
+
+                if (alphaVal >=1){
+                    img.setAlpha(0.3f);
+                    name.setTextColor(getResources().getColor(R.color.lightGrey));
+                } else {
+                    img.setAlpha(1f);
+                    name.setTextColor(getResources().getColor(R.color.bluegray));
+
+                }
                 //img.setVisibility(View.INVISIBLE);
                 //img.getDrawable().setColorFilter(getResources().getColor(R.color.redorange), PorterDuff.Mode.SRC_ATOP);
                 //color = new PorterDuffColorFilter(ResourcesCompat.getColor(context.getResources(), resId))
