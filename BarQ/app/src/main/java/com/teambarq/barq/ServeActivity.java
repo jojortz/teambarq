@@ -471,15 +471,22 @@ public class ServeActivity extends AppCompatActivity {
     }
 
     private void addToAllOrdersAndDelete(final String MACid){
-        user.child("RunningQueue").child(MACid).addListenerForSingleValueEvent(new ValueEventListener() {
+        user.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Order order1 = snapshot.getValue(Order.class);
+                Order order1 = snapshot.child("RunningQueue").child(MACid).getValue(Order.class);
                 long deltaTime = System.currentTimeMillis() - topQueueTime;
-                String duration = getFormattedTime(deltaTime);
-                order1.Duration = duration;
+                order1.Duration = deltaTime;
                 order1.Servers = currentServers;
                 user.child("AllOrders").push().setValue(order1);
+                for (int i=0;i<currentServers.size();i++){
+                    long totalOrders = (long) snapshot.child("BartenderList").child(currentServers.get(i)).child("totalOrdersServed").getValue();
+                    long totalTime = (long) snapshot.child("BartenderList").child(currentServers.get(i)).child("totalDuration").getValue();
+                    totalOrders = totalOrders+1;
+                    totalTime = totalTime + deltaTime;
+                    user.child("BartenderList").child(currentServers.get(i)).child("totalOrdersServed").setValue(totalOrders);
+                    user.child("BartenderList").child(currentServers.get(i)).child("totalDuration").setValue(totalTime);
+                }
                 user.child("RunningQueue").child(MACid).removeValue();
 //                        Log.e("FB", "Added to AllOrders");
             }

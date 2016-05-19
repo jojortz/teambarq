@@ -7,10 +7,15 @@ public class Bartender {
     String name;
     String profilePic;
     String id;
+    public int totalOrdersServed;
+    public long totalDuration;
 
     public Bartender(String name,String profilePic){
         this.name = name;
         this.profilePic = profilePic;
+        this.totalDuration = 0;
+        this.totalOrdersServed = 0;
+
     }
 
     public Bartender(){
