@@ -39,40 +39,73 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class AnalyticsActivity extends AppCompatActivity {
 
     Firebase ref = new Firebase("https://barq.firebaseio.com/");
     private AuthData authData;
     private Firebase user;
-
+    private ArrayList<BarEntry> yAxisBarData = new ArrayList<>();
+    private ArrayList<String> xAxisBarLabel = new ArrayList<>();
+    private BarDataSet barDataSet;
+    private BarChart chart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analytics);
-        BarChart chart = (BarChart) findViewById(R.id.chart);
+        chart = (BarChart) findViewById(R.id.chart);
 
-        BarData data = new BarData(getXAxisValues(), getDataSet());
-        chart.setData(data);
-        chart.setDescription("My Chart");
-        chart.animateXY(2000, 2000);
-        chart.invalidate();
+        //Initializing Firebase database for HistoryActivity
+        authData = ref.getAuth();
+        String authUid = authData.getUid();
+        user = ref.child(authUid);
+        Log.i("user", authUid);
+
+
+        //get data
+        getDataSet();
+
     }
 
-    private BarDataSet getDataSet() {
+    private void getDataSet() {
         //ArrayList<BarDataSet> dataSets = null;
 
         user.child("BartenderList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("inside", "of function");
+
+                int idx = 0;
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Bartender bartender = itemSnapshot.getValue(Bartender.class);
 
+                    if (bartender.totalOrdersServed != 0) {
+                        float duration = new Float((float)bartender.totalDuration).longValue();
+                        float aveMillis = duration / bartender.totalOrdersServed;
+                        float aveSecs = aveMillis/1000;
 
-                    //user.child("RunningQueue").child(itemSnapshot.getKey()).child("QueuePosition").setValue(newPosition);
-//                            Log.e("FB", "Updating queue positions in FB");
+
+                        BarEntry barEntry = new BarEntry(aveSecs, idx); // Jan
+                        yAxisBarData.add(barEntry);
+
+                        //add bartender to x axis array
+                        xAxisBarLabel.add(bartender.getName());
+
+                        idx++;
+                    }
                 }
-                //pos = pos - 1;
+
+                barDataSet = new BarDataSet(yAxisBarData, "");
+                barDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+
+
+
+                BarData data = new BarData(xAxisBarLabel, barDataSet);
+                chart.setData(data);
+                chart.setDescription("Ave Wait Times");
+                chart.animateXY(2000, 2000);
+                chart.invalidate();
             }
 
             @Override
@@ -80,32 +113,7 @@ public class AnalyticsActivity extends AppCompatActivity {
 
             }
         });
-        
-        ArrayList<BarEntry> valueSet1 = new ArrayList<>();
-        BarEntry v1e1 = new BarEntry(110.000f, 0); // Jan
-        valueSet1.add(v1e1);
-        BarEntry v1e2 = new BarEntry(40.000f, 1); // Feb
-        valueSet1.add(v1e2);
-        BarEntry v1e3 = new BarEntry(60.000f, 2); // Mar
-        valueSet1.add(v1e3);
-        BarEntry v1e4 = new BarEntry(30.000f, 3); // Apr
-        valueSet1.add(v1e4);
-        BarEntry v1e5 = new BarEntry(90.000f, 4); // May
-        valueSet1.add(v1e5);
-        BarEntry v1e6 = new BarEntry(100.000f, 5); // Jun
-        valueSet1.add(v1e6);
 
-
-
-
-
-        BarDataSet barDataSet1 = new BarDataSet(valueSet1, "");
-        barDataSet1.setColors(ColorTemplate.JOYFUL_COLORS);
-        return barDataSet1;
-
-//        dataSets = new ArrayList<>();
-//        dataSets.add(barDataSet1);
-//        return dataSets;
     }
 
     private ArrayList<String> getXAxisValues() {
