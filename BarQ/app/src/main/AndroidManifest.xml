@@ -27,7 +27,7 @@
         <activity
             android:name=".ServeActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".AnalyticsActivity"></activity>
+        <activity android:name=".AnalyticsActivity" />
     </application>
 
 </manifest>
