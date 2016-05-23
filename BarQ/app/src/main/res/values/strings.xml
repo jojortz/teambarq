@@ -34,4 +34,7 @@
     <string name="upNext">Up Next</string>
     <string name="waitingTimer">0:00</string>
 
+    <!--Analytics Activity-->
+    <string name="dummy_section_text">Section %1d is just a dummy section.</string>
+
 </resources>
