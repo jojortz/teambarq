@@ -25,7 +25,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
-import com.github.mikephil.charting.animation.AnimationEasing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -96,26 +95,26 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the action bar.
-        //   final ActionBar actionBar = getActionBar();
+     //   final ActionBar actionBar = getActionBar();
 
         // Specify that the Home/Up button should not be enabled, since there is no hierarchical
         // parent.
-        // actionBar.setHomeButtonEnabled(false);
+       // actionBar.setHomeButtonEnabled(false);
 
         // Specify that we will be displaying tabs in the action bar.
-        //    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+    //    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mAppSectionsPagerAdapter);
+        mViewPager.setAdapter( mAppSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 // When swiping between different app sections, select the corresponding tab.
                 // We can also use ActionBar.Tab#select() to do this if we have a reference to the
                 // Tab.
-                //      actionBar.setSelectedNavigationItem(position);
+          //      actionBar.setSelectedNavigationItem(position);
             }
         });
 
@@ -374,7 +373,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                 }
             });
-
         }
 
         public int[] getBarChartColors(Context context){
@@ -418,7 +416,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         Firebase ref = new Firebase("https://barq.firebaseio.com/");
         private AuthData authData;
         private Firebase user;
-        PieData d;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -434,85 +431,59 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
             pieChart.setDescription("");
 
-            Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
-            Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
+          //  Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
 
-            pieChart.setCenterText("Orders\n\nper\n\nLocation");//generateCenterText());
-            pieChart.setCenterTextSize(30f);
-            pieChart.setCenterTextTypeface(gothamMedium);
-            pieChart.setCenterTextColor(getContext().getResources().getColor(R.color.darkgray));
+            //pieChart.setCenterTextTypeface(tf);
+            pieChart.setCenterText("TEST");//generateCenterText());
+            pieChart.setCenterTextSize(10f);
+            //pieChart.setCenterTextTypeface(tf);
 
             // radius of the center hole in percent of maximum radius
-            pieChart.setHoleRadius(60f);
-            pieChart.setTransparentCircleRadius(65f);
-            pieChart.getLegend().setEnabled(false);
+            pieChart.setHoleRadius(45f);
+            pieChart.setTransparentCircleRadius(50f);
 
-            pieChart.setRotationEnabled(true);
-            pieChart.setHighlightEnabled(false);
+            Legend l = pieChart.getLegend();
+            l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
 
-//            pieChart.animateY(1400, AnimationEasing.EasingOption.EaseInOutQuad);
-            pieChart.animateY(1400);
-
-            pieChart.setUsePercentValues(true);
-
-            generatePieData();
+            pieChart.setData(generatePieData());
 
             return rootView;
         }
 
-
-        public int[] getBarChartColors(Context context){
-            int[] barChartColors = {Color.rgb(Color.red(context.getResources().getColor(R.color.redorange)),
-                    Color.green(context.getResources().getColor(R.color.redorange)),
-                    Color.blue(context.getResources().getColor(R.color.redorange))),
-                    Color.rgb(Color.red(context.getResources().getColor(R.color.softyellow)),
-                            Color.green(context.getResources().getColor(R.color.softyellow)),
-                            Color.blue(context.getResources().getColor(R.color.softyellow))),
-                    Color.rgb(Color.red(context.getResources().getColor(R.color.bluegreen)),
-                            Color.green(context.getResources().getColor(R.color.bluegreen)),
-                            Color.blue(context.getResources().getColor(R.color.bluegreen)))};
-            return barChartColors;
+        private SpannableString generateCenterText() {
+            SpannableString s = new SpannableString("Revenues\nQuarters 2015");
+            s.setSpan(new RelativeSizeSpan(2f), 0, 8, 0);
+            s.setSpan(new ForegroundColorSpan(Color.GRAY), 8, s.length(), 0);
+            return s;
         }
 
+        protected PieData generatePieData() {
 
-        private void generatePieData() {
+            int count = 4;
 
+            ArrayList<Entry> entries1 = new ArrayList<Entry>();
+            ArrayList<String> xVals = new ArrayList<String>();
 
-            final ArrayList<Entry> entries1 = new ArrayList<Entry>();
-            final ArrayList<String> xVals = new ArrayList<String>();
+            xVals.add("Quarter 1");
+            xVals.add("Quarter 2");
+            xVals.add("Quarter 3");
+            xVals.add("Quarter 4");
 
-            user.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.i("inside", "of function");
-                    int idx = 0;
-                    for (DataSnapshot itemSnapshot : dataSnapshot.child("Devices").getChildren()) {
-                        Device device1 = itemSnapshot.getValue(Device.class);
-                        xVals.add(device1.Location);
-                        entries1.add(new Entry(device1.numOfOrders, idx));
-                        idx++;
-                    }
+            for(int i = 0; i < count; i++) {
+                xVals.add("entry" + (i+1));
 
+                entries1.add(new Entry((float) (Math.random() * 60) + 40, i));
+            }
 
-                    Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
-                    Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
+            PieDataSet ds1 = new PieDataSet(entries1, "Quarterly Revenues 2015");
+            ds1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            ds1.setSliceSpace(2f);
+            ds1.setValueTextColor(Color.WHITE);
+            ds1.setValueTextSize(12f);
 
-                    PieDataSet ds1 = new PieDataSet(entries1, "Location Data");
-                    ds1.setColors(getBarChartColors(getContext()));
-                    ds1.setSliceSpace(2f);
-                    ds1.setValueTextColor(Color.WHITE);
-                    ds1.setValueTypeface(gothamMedium);
-                    ds1.setValueTextSize(20f);
-                    d = new PieData(xVals, ds1);
-                    pieChart.setData(d);
-                }
+            PieData d = new PieData(xVals, ds1);
 
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
+            return d;
         }
     }
 

@@ -69,7 +69,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
 
-public class AnalyticsActivity extends FragmentActivity implements ActionBar.TabListener  {
+public class AnalyticsActivity extends FragmentActivity implements ActionBar.TabListener {
     //Fragment
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -81,8 +81,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
     RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
+    private String drawerTitles[] = {"Analytics", "Shift Creator", "Serve"};
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon, R.drawable.ic_add_person, R.drawable.ic_bar_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,22 +140,17 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (position == 1)
-                        {
+                        if (position == 1) {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
-                        }
-                        else if(position == 2)
-                        {
+                        } else if (position == 2) {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
 
                             //Launch Shift Activity
                             Intent intent = new Intent(AnalyticsActivity.this, ShiftActivity.class);
                             startActivity(intent);
-                        }
-                        else if(position == 3)
-                        {
+                        } else if (position == 3) {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
 
@@ -292,9 +287,9 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                         //get ave time for each bartender
                         if (bartender.totalOrdersServed != 0) {
-                            float duration = new Float((float)bartender.totalDuration).longValue();
+                            float duration = new Float((float) bartender.totalDuration).longValue();
                             float aveMillis = duration / bartender.totalOrdersServed;
-                            float aveSecs = aveMillis/1000;
+                            float aveSecs = aveMillis / 1000;
 
 
                             BarEntry barEntry = new BarEntry(aveSecs, idx); // Jan
@@ -332,8 +327,11 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                     barDataSet = new BarDataSet(yAxisBarData, "");
 
+<<<<<<< HEAD
+=======
                     barDataSet.setColors(getBarChartColors(getContext()));
 
+>>>>>>> 561b5b6be25086533b7fd961a0df6542300502c3
                     BarData data = new BarData(xAxisBarLabel, barDataSet);
                     chart.setData(data);
 
@@ -374,7 +372,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                 }
             });
-
         }
 
         public int[] getBarChartColors(Context context){
@@ -584,3 +581,5 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
 
 }
+
+

@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     Firebase myFirebaseRef;
     private String barID;
     //TODO debounce buttons
+    //TODO add condition for clicking next without anyhting in edittext
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

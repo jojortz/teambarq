@@ -15,12 +15,17 @@
     <color name = "whitesmoke">#F5F5F5</color>
     <color name = "darkgray">#575757</color>
     <color name = "bluegray">#2d5986</color>
+    <color name = "black">#000000 </color>
+
 
     <color name = "steelgray">#50514F</color>
     <color name = "redorange">#F25F5C</color>
     <color name = "softyellow">#FFE066</color>
     <color name = "royalblue">#1B5F7C</color>
     <color name = "bluegreen">#70C1B3</color>
+    <color name = "brightpurple">#902BEF</color>
+    <color name = "forestgreen">#2C592C</color>
+
 
 
 
