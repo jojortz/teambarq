@@ -49,11 +49,11 @@ public class ShiftActivity extends AppCompatActivity {
     //Navigation drawer
     private DrawerLayout mDrawerLayout;
     private RecyclerView navRecyclerView;
-    RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
-    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    private RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
+    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
+    private String drawerTitles[] = { "Analytics", "Shift Creator","Feedback", "Help" };
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person, R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class ShiftActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Save current ServerList to Firebase
                 activeListRef.removeValue();
+
                 SparseBooleanArray checkedItems = gridview.getCheckedItemPositions();
                 if (checkedItems != null) {
                     for (int i = 0; i < checkedItems.size(); i++) {
@@ -101,14 +102,15 @@ public class ShiftActivity extends AppCompatActivity {
                             ActiveBartenderList.add(newBartender.getId());
                         }
                     }
+                    //Add active list to Firebase
+                    activeListRef.setValue(ActiveBartenderList);
+
+                    //Launch Queue Activity
+                    Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(),R.string.no_bartenders_selected,Toast.LENGTH_SHORT).show();
                 }
-
-                //Add active list to Firebase
-                activeListRef.setValue(ActiveBartenderList);
-
-                //Launch Queue Activity
-                Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -145,7 +147,7 @@ public class ShiftActivity extends AppCompatActivity {
 
         navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
-        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.bar_icon);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com",R.drawable.barq_logo_white_text);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
         // And passing the titles,icons,header view name, header view email,
         // and header view profile picture
         navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView

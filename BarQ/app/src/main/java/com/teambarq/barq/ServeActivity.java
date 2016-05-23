@@ -59,11 +59,11 @@ public class ServeActivity extends AppCompatActivity {
     //Navigation drawer
     private DrawerLayout mDrawerLayout;
     private RecyclerView navRecyclerView;
-    RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
-    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    private RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
+    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
+    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve","Feedback", "Help" };
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon, R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,11 +235,11 @@ public class ServeActivity extends AppCompatActivity {
         //Setting up navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.serve_drawerLayout);
 
-        navRecyclerView = (RecyclerView) findViewById(R.id.navRecyclerView); // Assigning the RecyclerView Object to the xml View
+        navRecyclerView = (RecyclerView) findViewById(R.id.serve_navRecyclerView); // Assigning the RecyclerView Object to the xml View
 
         navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
-        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.bar_icon);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.barq_logo_white_text);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
         // And passing the titles,icons,header view name, header view email,
         // and header view profile picture
         navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView

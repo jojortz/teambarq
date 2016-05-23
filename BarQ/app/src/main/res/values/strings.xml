@@ -24,6 +24,7 @@
     <!-- Shift Activity-->
     <string name="shift_activity_title">Select the Shift</string>
     <string name="newShiftButton">Start Pouring!</string>
+    <string name="no_bartenders_selected">Please select bartenders for this shift.</string>
 
 
     <!-- Navigation Drawer-->

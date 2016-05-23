@@ -186,7 +186,7 @@
 
     <!-- Side navigation drawer UI -->
     <android.support.v7.widget.RecyclerView
-    android:id="@+id/navRecyclerView"
+    android:id="@+id/serve_navRecyclerView"
     android:layout_width="320dp"
     android:layout_height="match_parent"
     android:layout_gravity="left"
