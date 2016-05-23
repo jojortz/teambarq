@@ -1,7 +1,5 @@
 package com.teambarq.barq;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 public class Order {
