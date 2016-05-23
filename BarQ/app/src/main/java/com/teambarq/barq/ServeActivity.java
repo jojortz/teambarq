@@ -11,6 +11,7 @@ package com.teambarq.barq;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.util.Log;
+        import android.util.SparseBooleanArray;
         import android.view.GestureDetector;
         import android.view.MotionEvent;
         import android.view.View;
@@ -28,6 +29,7 @@ package com.teambarq.barq;
         import com.firebase.client.Firebase;
         import com.firebase.client.FirebaseError;
         import com.firebase.client.Query;
+        import com.firebase.client.ServerValue;
         import com.firebase.client.ValueEventListener;
         import com.github.mikephil.charting.data.BarEntry;
         import com.squareup.picasso.Picasso;
@@ -52,6 +54,7 @@ public class ServeActivity extends AppCompatActivity {
     private static String DEVICEMAC2 = "5ccf7f0fd6e4"; //center, yellow
     private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
     private static String DEVICEMAC3 = "18fe34d45db8"; //right, blue
+    private Button endShift;
 
     //Navigation drawer
     private DrawerLayout mDrawerLayout;
@@ -209,6 +212,24 @@ public class ServeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(FirebaseError firebaseError) {
             }
+        });
+
+        endShift = (Button) findViewById(R.id.endShift_Button);
+
+        endShift.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //Remove data from firebase
+                user.child("RunningQueue").removeValue();
+                user.child("ActiveBartenderList").removeValue();
+
+                //Launch Shift Activity
+                Intent intent = new Intent(ServeActivity.this, ShiftActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
         });
 
         //Setting up navigation drawer

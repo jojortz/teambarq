@@ -443,8 +443,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
             pieChart.setCenterTextColor(getContext().getResources().getColor(R.color.darkgray));
 
             // radius of the center hole in percent of maximum radius
-            pieChart.setHoleRadius(60f);
-            pieChart.setTransparentCircleRadius(65f);
+            pieChart.setHoleRadius(55f);
+            pieChart.setTransparentCircleRadius(60f);
             pieChart.getLegend().setEnabled(false);
 
             pieChart.setRotationEnabled(true);
@@ -453,7 +453,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 //            pieChart.animateY(1400, AnimationEasing.EasingOption.EaseInOutQuad);
             pieChart.animateY(1400);
 
-            pieChart.setUsePercentValues(true);
+//            pieChart.setUsePercentValues(true);
 
             generatePieData();
 
@@ -503,8 +503,10 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     ds1.setValueTextColor(Color.WHITE);
                     ds1.setValueTypeface(gothamMedium);
                     ds1.setValueTextSize(20f);
+                    ds1.setValueFormatter(new IntForPieChartFormatter());
                     d = new PieData(xVals, ds1);
                     pieChart.setData(d);
+
                 }
 
 

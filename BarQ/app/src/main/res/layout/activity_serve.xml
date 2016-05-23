@@ -4,6 +4,7 @@
     android:id="@+id/serve_drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 <RelativeLayout
     android:id = "@+id/serveActivityRL"
     android:layout_width="match_parent"
@@ -62,8 +63,7 @@
         app:rb_rippleAmount="3"
         app:rb_duration="4000"
         app:rb_scale="3"
-        android:layout_alignParentLeft="true"
-        >
+        android:layout_alignParentLeft="true">
         <ImageView
             android:id="@+id/cirImage2"
             android:layout_width="64dp"
@@ -166,6 +166,20 @@
 
             />
     </FrameLayout>
+
+    <Button
+        android:id="@+id/endShift_Button"
+        android:layout_width="250dp"
+        android:textSize="12pt"
+        android:layout_height="wrap_content"
+        android:text="@string/endShiftButton"
+        android:background="@color/bluegray"
+        android:textColor="@color/whitesmoke"
+        android:textAllCaps="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="207dp"
+        android:layout_marginBottom="16dp"></Button>
+
 
 
 </RelativeLayout>
