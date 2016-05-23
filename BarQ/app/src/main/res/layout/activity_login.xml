@@ -100,4 +100,13 @@
         android:visibility="invisible"
         />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/username"
+        android:src="@drawable/barQlogoWhiteText"
+        android:layout_alignBottom="@+id/loginButton" />
+
 </RelativeLayout>
