@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="178dp"
-    android:background="@color/bluegray"
+    android:background="@color/royalblue"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <TextView
+        <!-- <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,8 +38,11 @@
             android:textStyle="normal"
 
             />
+
+            -->
     </LinearLayout>
 
+    <!--
     <com.teambarq.barq.RoundedImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -48,4 +51,13 @@
         android:layout_marginTop="38dp"
         android:id="@+id/circleView"
         />
+        -->
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:src="@drawable/barQlogoWhiteText"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>
