@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.StrikethroughSpan;
 import android.text.style.TtsSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,10 @@ import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -37,7 +40,12 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -52,6 +60,8 @@ import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -192,6 +202,14 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     // a launchpad into the other demonstrations in this example application.
                     return new BarChartFragment();
 
+                case 1:
+                    Fragment pieChartFrag = new PieChartFragment();
+                    return pieChartFrag;
+
+                case 2:
+                    Fragment lineChartFrag = new LineChartFragment();
+                    return lineChartFrag;
+
                 default:
                     // The other sections of the app are dummy placeholders.
                     Fragment fragment = new PieChartFragment();
@@ -210,15 +228,16 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         }
     }
 
-    /**
-     * A fragment that launches other parts of the demo application.
-     */
+
+    /** --------------------------------------------------------------------------------------------------------
+     * Bar chart that displays average time it takes each bartender to serve customers
+       -------------------------------------------------------------------------------------------------------- */
+
+
     public static class BarChartFragment extends Fragment {
         private ArrayList<BarEntry> yAxisBarData = new ArrayList<>();
         private ArrayList<String> xAxisBarLabel = new ArrayList<>();
         private BarDataSet barDataSet;
-        //color template for charts
-
 
         Firebase ref = new Firebase("https://barq.firebaseio.com/");
         private AuthData authData;
@@ -249,6 +268,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
             TextView barchartTitle = (TextView) rootView.findViewById(R.id.barchartTitle);
             barchartTitle.setTypeface(gothamMedium);
+            barchartTitle.setTextColor(getResources().getColor(R.color.darkgray));
 
             //get data
             getDataSet();
@@ -302,9 +322,11 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                         Log.i("aveLine", String.valueOf(aveOrderDur));
                         line = new LimitLine(aveOrderDur);
                         line.setLineColor(getResources().getColor(R.color.darkgray));
-                        line.setLineWidth(5);
+                        line.setLineWidth(4);
                         line.enableDashedLine(20f, 10f, 0f);
                         line.setLabel(getResources().getString(R.string.bar_ave_wait));
+                        line.setTextSize(15);
+                        line.setTextColor(getResources().getColor(R.color.darkgray));
                     }
 
                     barDataSet = new BarDataSet(yAxisBarData, "");
@@ -315,22 +337,25 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     chart.setData(data);
 
                     //set fonts
-                    Typeface gothamExtraLight =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamExtraLight.TTF");
+                    Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
                     Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
 
                     //add average value limitLine
                     YAxis yAxis = chart.getAxisLeft();
                     yAxis.addLimitLine(line);
-                    yAxis.setTypeface(gothamRegular);
+                    yAxis.setTypeface(gothamMedium);
+                    yAxis.setTextColor(getResources().getColor(R.color.darkgray));
                     yAxis.setTextSize(20);
                     yAxis.setDrawGridLines(false);
                     yAxis.setDrawLabels(true);
 
                     XAxis xAxis = chart.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setTypeface(gothamRegular);
+                    xAxis.setTypeface(gothamMedium);
+                    xAxis.setTextColor(getResources().getColor(R.color.darkgray));
                     xAxis.setTextSize(20);
                     xAxis.setDrawGridLines(false);
+
 
                     //format chart
                     chart.setDescription("");
@@ -348,7 +373,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                 }
             });
-
         }
 
         public int[] getBarChartColors(Context context){
@@ -382,9 +406,11 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
     }
 
-    /**
-     * A dummy fragment representing a section of the app, but that simply displays dummy text.
-     */
+    /** --------------------------------------------------------------------------------------------------------
+     * Pie Chart that breaks down the percentage of orders from each location
+     -------------------------------------------------------------------------------------------------------- */
+
+
     public static class PieChartFragment extends Fragment {
         private PieChart pieChart;
         Firebase ref = new Firebase("https://barq.firebaseio.com/");
@@ -461,6 +487,71 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         }
     }
 
+    /** --------------------------------------------------------------------------------------------------------
+     * Line Chart of average wait times for a given date.
+     -------------------------------------------------------------------------------------------------------- */
+
+
+    public static class LineChartFragment extends Fragment {
+        private PieChart pieChart;
+        Firebase ref = new Firebase("https://barq.firebaseio.com/");
+        private AuthData authData;
+        private Firebase user;
+        private DatePicker dpResult;
+        private Button selectDate;
+        static final long DAY_MILLIS = 86400000;
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
+
+            authData = ref.getAuth();
+            String authUid = authData.getUid();
+            user = ref.child(authUid);
+            Log.i("user", authUid);
+
+            selectDate = (Button) rootView.findViewById(R.id.selectDateButton);
+            dpResult = (DatePicker) rootView.findViewById(R.id.datePicker);
+
+            selectDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int day = dpResult.getDayOfMonth();
+                    int month = dpResult.getMonth() + 1;
+                    int year = dpResult.getYear();
+
+                    Log.i("day", String.valueOf(day));
+                    Log.i("month", String.valueOf(month));
+                    Log.i("year", String.valueOf(year));
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(dpResult.getYear(), dpResult.getMonth(), dpResult.getDayOfMonth(), 0, 0, 0);
+                    long dateStartMillis = calendar.getTimeInMillis();
+                    long dateEndMillis = dateStartMillis + DAY_MILLIS;
+
+                    Log.i("dateMillis", String.valueOf(dateStartMillis));
+
+
+                    Query query2 = user.child("AllOrders").orderByChild("TimeIn").startAt(dateStartMillis).
+                            endAt(dateEndMillis);
+                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //create array from data
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                    }
+                });
+
+            return rootView;
+        }
+    }
 
 
 }
