@@ -1,7 +1,5 @@
 package com.teambarq.barq;
 
-import android.widget.NumberPicker;
-
 import com.github.mikephil.charting.utils.ValueFormatter;
 
 /**

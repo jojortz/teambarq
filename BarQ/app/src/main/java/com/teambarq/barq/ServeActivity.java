@@ -1,43 +1,38 @@
 package com.teambarq.barq;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.res.Resources;
-        import android.graphics.PorterDuff;
-        import android.graphics.Typeface;
-        import android.graphics.drawable.Drawable;
-        import android.support.v4.widget.DrawerLayout;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.support.v7.widget.LinearLayoutManager;
-        import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
-        import android.util.SparseBooleanArray;
-        import android.view.GestureDetector;
-        import android.view.MotionEvent;
-        import android.view.View;
-        import android.view.WindowManager;
-        import android.widget.Button;
-        import android.widget.ImageView;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.os.Handler;
-        import android.widget.Toast;
 
-        import com.firebase.client.AuthData;
-        import com.firebase.client.ChildEventListener;
-        import com.firebase.client.DataSnapshot;
-        import com.firebase.client.Firebase;
-        import com.firebase.client.FirebaseError;
-        import com.firebase.client.Query;
-        import com.firebase.client.ServerValue;
-        import com.firebase.client.ValueEventListener;
-        import com.github.mikephil.charting.data.BarEntry;
-        import com.squareup.picasso.Picasso;
-        import com.skyfishjy.library.RippleBackground;
-        import junit.framework.Test;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.concurrent.TimeUnit;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
+import com.skyfishjy.library.RippleBackground;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class ServeActivity extends AppCompatActivity {
     private long topQueueTime = 0; //initialize
