@@ -37,6 +37,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -46,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
@@ -68,6 +72,9 @@ import android.widget.TextView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class AnalyticsActivity extends FragmentActivity implements ActionBar.TabListener  {
     //Fragment
@@ -297,7 +304,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                             float aveSecs = aveMillis/1000;
 
 
-                            BarEntry barEntry = new BarEntry(aveSecs, idx); // Jan
+                            BarEntry barEntry = new BarEntry(aveSecs, idx);
                             yAxisBarData.add(barEntry);
 
                             //add bartender to x axis array
@@ -356,7 +363,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     xAxis.setTextColor(getResources().getColor(R.color.darkgray));
                     xAxis.setTextSize(20);
                     xAxis.setDrawGridLines(false);
-
 
                     //format chart
                     chart.setDescription("");
@@ -531,11 +537,20 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         private DatePicker dpResult;
         private Button selectDate;
         static final long DAY_MILLIS = 86400000;
+        static final long FOUR_HRS_MILLIS = 14400000;
+        private ArrayList<Entry> yAxisLineData = new ArrayList<>();
+        private ArrayList<String> xAxisLineData = new ArrayList<>();
+        private LineDataSet lineDataSet;
+        private LineChart lineChart;
+
+        private DataPoint[] graphDataPoints;
+        private LineGraphSeries<DataPoint> line_series = new LineGraphSeries<>();
+        private DataPoint[] lineGraphData;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
 
             authData = ref.getAuth();
             String authUid = authData.getUid();
@@ -545,6 +560,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
             selectDate = (Button) rootView.findViewById(R.id.selectDateButton);
             dpResult = (DatePicker) rootView.findViewById(R.id.datePicker);
 
+            lineChart = (LineChart) rootView.findViewById(R.id.lineChart);
+
             selectDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -552,25 +569,86 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     int month = dpResult.getMonth() + 1;
                     int year = dpResult.getYear();
 
-                    Log.i("day", String.valueOf(day));
-                    Log.i("month", String.valueOf(month));
-                    Log.i("year", String.valueOf(year));
+//                    Log.i("day", String.valueOf(day));
+//                    Log.i("month", String.valueOf(month));
+//                    Log.i("year", String.valueOf(year));
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(dpResult.getYear(), dpResult.getMonth(), dpResult.getDayOfMonth(), 0, 0, 0);
-                    long dateStartMillis = calendar.getTimeInMillis();
-                    long dateEndMillis = dateStartMillis + DAY_MILLIS;
+//                    long dateStartMillis = calendar.getTimeInMillis() - FOUR_HRS_MILLIS;
+//                    long dateEndMillis = dateStartMillis + FOUR_HRS_MILLIS + FOUR_HRS_MILLIS;
+                    long dateStartMillis = 1463975177763L;
+                    long dateEndMillis = 1463984295601L;
 
-                    Log.i("dateMillis", String.valueOf(dateStartMillis));
+                    Log.i("dateStartMillis", String.valueOf(dateStartMillis));
+                    Log.i("dateEndMillis", String.valueOf(dateEndMillis));
 
+
+//                    Log.i("dateMillis", String.valueOf(dateStartMillis));
 
                     Query query2 = user.child("AllOrders").orderByChild("TimeIn").startAt(dateStartMillis).
                             endAt(dateEndMillis);
                     query2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.i("Count " ,""+ dataSnapshot.getChildrenCount());
+
+                            int idx = 0;
+                            for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                                Order order = postSnapshot.getValue(Order.class);
+                                Log.i("TimeIn", String.valueOf(order.TimeIn));
+                                Log.i("Duration", String.valueOf(order.Duration));
+
+//                                //format label
+//                                long timeInMillis = order.Duration;
+//                                long hours = TimeUnit.MILLISECONDS.toHours(timeInMillis);
+//                                timeInMillis -= TimeUnit.HOURS.toMillis(hours);
+//                                long minutes = TimeUnit.MILLISECONDS.toMinutes(timeInMillis);
+//                                StringBuilder sb = new StringBuilder();
+//                                sb.append(hours);
+//                                sb.append(":");
+//                                sb.append(minutes);
+//                                String formattedTimeIn = String.format("%02d:%02d", hours, minutes);
+
+
+                                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd hh:mm:ss");
+
+                                // Create a calendar object that will convert the date and time value in milliseconds to date.
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(order.TimeIn);
+                                String formattedTimeIn = formatter.format(calendar.getTime());
+
+                                xAxisLineData.add(formattedTimeIn);
+                                yAxisLineData.add(new Entry(order.Duration/1000, idx));
+
+
+                                //line_series = new LineGraphSeries<DataPoint>(new DataPoint[] {new DataPoint(0,2)});
+                                line_series.appendData(new DataPoint(order.TimeIn, order.Duration/1000),true,100);
+
+
+
+                                idx++;
+                            }
+
+                            //DataSnapshot dinosaur = dataSnapshot.getChildren().iterator().next();
+                            //Order newOrder = dinosaur.getValue(Order.class);
                             //create array from data
+                            //Order order = dataSnapshot.getValue(Order.class);
+                            //float orderTimeIn = new Float((float) order.TimeIn).longValue();
+                            //String orderTimeIn = (String) dataSnapshot.getValue();
+                            //Log.i("orderTimeIn", String.valueOf(newOrder.TimeIn) );
+                            //Log.i("orderTimeIn", String.valueOf(dataSnapshot.getKey()));
+
+//                            lineDataSet = new LineDataSet(yAxisLineData, "");
+//                            LineData data = new LineData(xAxisLineData,lineDataSet);
+//                            lineChart.setData(data);
+//                            lineChart.invalidate();
+                            //line_series = new LineGraphSeries<DataPoint>(new DataPoint[]{graphDataPoints});
+                            GraphView line_graph = (GraphView) rootView.findViewById(R.id.lineGraph);
+                            line_graph.addSeries(line_series);
+                            line_graph.invalidate();
                         }
+
 
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {
@@ -579,6 +657,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     });
                     }
                 });
+
+
 
             return rootView;
         }
