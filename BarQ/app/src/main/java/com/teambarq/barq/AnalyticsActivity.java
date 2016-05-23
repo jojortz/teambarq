@@ -2,6 +2,7 @@ package com.teambarq.barq;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.TtsSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.util.Log;
@@ -22,7 +24,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -46,6 +52,7 @@ import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -55,6 +62,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
     //Fragment
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
     ViewPager mViewPager;
+    Context context = this;
 
     //Navigation drawer
     private DrawerLayout mDrawerLayout;
@@ -209,11 +217,14 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         private ArrayList<BarEntry> yAxisBarData = new ArrayList<>();
         private ArrayList<String> xAxisBarLabel = new ArrayList<>();
         private BarDataSet barDataSet;
+        //color template for charts
+
 
         Firebase ref = new Firebase("https://barq.firebaseio.com/");
         private AuthData authData;
         private Firebase user;
         private BarChart chart;
+        private LimitLine line;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -238,15 +249,16 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         private void getDataSet() {
             //ArrayList<BarDataSet> dataSets = null;
 
-            user.child("BartenderList").addListenerForSingleValueEvent(new ValueEventListener() {
+            user.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.i("inside", "of function");
 
                     int idx = 0;
-                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                        Bartender bartender = itemSnapshot.getValue(Bartender.class);
+                    for (DataSnapshot bartenderSnapshot : dataSnapshot.child("BartenderList").getChildren()) {
+                        Bartender bartender = bartenderSnapshot.getValue(Bartender.class);
 
+                        //get ave time for each bartender
                         if (bartender.totalOrdersServed != 0) {
                             float duration = new Float((float)bartender.totalDuration).longValue();
                             float aveMillis = duration / bartender.totalOrdersServed;
@@ -261,17 +273,74 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                             idx++;
                         }
+
+                        int allOrdersCount = 0;
+                        float allOrdersDur = 0;
+
+
+                        for (DataSnapshot orderSnapshot : dataSnapshot.child("AllOrders").getChildren()){
+                            Order order = orderSnapshot.getValue(Order.class);
+
+                            float orderDur = new Float((float) order.Duration).longValue();
+                            allOrdersDur = allOrdersDur + orderDur;
+                            allOrdersCount ++;
+
+                        }
+
+                        float aveOrderDur = (allOrdersDur/allOrdersCount)/1000;
+
+                        Log.i("aveLine", String.valueOf(aveOrderDur));
+                        line = new LimitLine(aveOrderDur);
+                        line.setLineColor(getResources().getColor(R.color.darkgray));
+                        line.setLineWidth(5);
+                        line.enableDashedLine(20f, 10f, 0f);
+                        line.setLabel(getResources().getString(R.string.bar_ave_wait));
                     }
 
                     barDataSet = new BarDataSet(yAxisBarData, "");
-                    barDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+
+
+                    barDataSet.setColors(getBarChartColors(getContext()));
 
 
 
                     BarData data = new BarData(xAxisBarLabel, barDataSet);
                     chart.setData(data);
-                    chart.setDescription("Ave Wait Times");
-                    chart.animateXY(2000, 2000);
+
+                    //set fonts
+                    Typeface gothamExtraLight =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamExtraLight.TTF");
+                    Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
+                    Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
+
+                    //add average value limitLine
+                    YAxis yAxis = chart.getAxisLeft();
+                    yAxis.addLimitLine(line);
+                    yAxis.setTypeface(gothamRegular);
+                    yAxis.setTextSize(20);
+                    yAxis.setDrawGridLines(false);
+                    yAxis.setDrawLabels(true);
+                    //set yaxis labels
+                    
+
+
+                    XAxis xAxis = chart.getXAxis();
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    xAxis.setTypeface(gothamRegular);
+                    xAxis.setTextSize(20);
+                    xAxis.setDrawGridLines(false);
+
+
+                    //format chart
+                    chart.setDescription(getResources().getString(R.string.barchart_title));
+                    chart.setDescriptionTypeface(gothamMedium);
+
+
+                    chart.setHighlightEnabled(false);
+                    chart.getAxisRight().setEnabled(false); //turn off right axis
+                    chart.getLegend().setEnabled(false);
+                    chart.getData().setDrawValues(false);
+                    chart.setDrawGridBackground(false);
+                    chart.animateY(3000);
                     chart.invalidate();
                 }
 
@@ -283,15 +352,25 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
         }
 
-        private ArrayList<String> getXAxisValues() {
-            ArrayList<String> xAxis = new ArrayList<>();
-            xAxis.add("JAN");
-            xAxis.add("FEB");
-            xAxis.add("MAR");
-            xAxis.add("APR");
-            xAxis.add("MAY");
-            xAxis.add("JUN");
-            return xAxis;
+        public int[] getBarChartColors(Context context){
+
+            int[] barChartColors = {Color.rgb(Color.red(context.getResources().getColor(R.color.redorange)),
+                    Color.green(context.getResources().getColor(R.color.redorange)),
+                    Color.blue(context.getResources().getColor(R.color.redorange))),
+
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.bluegray)),
+                            Color.green(context.getResources().getColor(R.color.bluegray)),
+                            Color.blue(context.getResources().getColor(R.color.bluegray))),
+
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.softyellow)),
+                            Color.green(context.getResources().getColor(R.color.softyellow)),
+                            Color.blue(context.getResources().getColor(R.color.softyellow))),
+
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.bluegreen)),
+                            Color.green(context.getResources().getColor(R.color.bluegreen)),
+                            Color.blue(context.getResources().getColor(R.color.bluegreen)))};
+
+            return barChartColors;
         }
 
     }
@@ -374,4 +453,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
             return d;
         }
     }
+
+
+
 }

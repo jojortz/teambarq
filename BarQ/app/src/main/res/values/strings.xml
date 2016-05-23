@@ -36,5 +36,10 @@
 
     <!--Analytics Activity-->
     <string name="dummy_section_text">Section %1d is just a dummy section.</string>
+    <string name="bar_ave_wait">Average Wait Time</string>
+    <string name="barchart_title">Average Wait Times for Staff</string>
+    <string name="barchart_y">Wait Time [s]</string>
+
+
 
 </resources>
