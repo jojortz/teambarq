@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="0dp"
+    android:paddingLeft="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.teambarq.barq.AnalyticsActivity">
@@ -14,7 +14,8 @@
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/barchartYLabel" />
+            android:layout_marginStart="58dp"
+            />
 
     <TextView
         android:id="@+id/barchartTitle"
@@ -34,7 +35,7 @@
         android:rotation="-90"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="-38dp"
+        android:layout_marginLeft="-25dp"
      />
 
 

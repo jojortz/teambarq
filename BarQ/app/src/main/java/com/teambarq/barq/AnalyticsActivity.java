@@ -239,9 +239,20 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
             chart = (BarChart) rootView.findViewById(R.id.chart);
 
+            //set yaxis label
+            TextView yAxis = (TextView) rootView.findViewById(R.id.barchartYLabel);
+            Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
+            Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
+
+            yAxis.setTextColor(getResources().getColor(R.color.darkgray));
+            yAxis.setTypeface(gothamMedium);
+
+            TextView barchartTitle = (TextView) rootView.findViewById(R.id.barchartTitle);
+            barchartTitle.setTypeface(gothamMedium);
 
             //get data
             getDataSet();
+
 
             return rootView;
         }
@@ -277,7 +288,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                         int allOrdersCount = 0;
                         float allOrdersDur = 0;
 
-
                         for (DataSnapshot orderSnapshot : dataSnapshot.child("AllOrders").getChildren()){
                             Order order = orderSnapshot.getValue(Order.class);
 
@@ -299,10 +309,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                     barDataSet = new BarDataSet(yAxisBarData, "");
 
-
                     barDataSet.setColors(getBarChartColors(getContext()));
-
-
 
                     BarData data = new BarData(xAxisBarLabel, barDataSet);
                     chart.setData(data);
@@ -310,7 +317,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     //set fonts
                     Typeface gothamExtraLight =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamExtraLight.TTF");
                     Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
-                    Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
 
                     //add average value limitLine
                     YAxis yAxis = chart.getAxisLeft();
@@ -319,9 +325,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     yAxis.setTextSize(20);
                     yAxis.setDrawGridLines(false);
                     yAxis.setDrawLabels(true);
-                    //set yaxis labels
-                    
-
 
                     XAxis xAxis = chart.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -329,12 +332,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                     xAxis.setTextSize(20);
                     xAxis.setDrawGridLines(false);
 
-
                     //format chart
-                    chart.setDescription(getResources().getString(R.string.barchart_title));
-                    chart.setDescriptionTypeface(gothamMedium);
-
-
+                    chart.setDescription("");
                     chart.setHighlightEnabled(false);
                     chart.getAxisRight().setEnabled(false); //turn off right axis
                     chart.getLegend().setEnabled(false);
@@ -368,7 +367,15 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                     Color.rgb(Color.red(context.getResources().getColor(R.color.bluegreen)),
                             Color.green(context.getResources().getColor(R.color.bluegreen)),
-                            Color.blue(context.getResources().getColor(R.color.bluegreen)))};
+                            Color.blue(context.getResources().getColor(R.color.bluegreen))),
+
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.brightpurple)),
+                            Color.green(context.getResources().getColor(R.color.brightpurple)),
+                            Color.blue(context.getResources().getColor(R.color.brightpurple))),
+
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.forestgreen)),
+                            Color.green(context.getResources().getColor(R.color.forestgreen)),
+                            Color.blue(context.getResources().getColor(R.color.forestgreen)))};
 
             return barChartColors;
         }
