@@ -2,6 +2,7 @@ package com.teambarq.barq;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.github.mikephil.charting.animation.AnimationEasing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
@@ -51,7 +53,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
 
-public class AnalyticsActivity extends FragmentActivity implements ActionBar.TabListener  {
+public class AnalyticsActivity extends FragmentActivity implements ActionBar.TabListener {
     //Fragment
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -62,8 +64,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
     RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
+    private String drawerTitles[] = {"Analytics", "Shift Creator", "Serve"};
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon, R.drawable.ic_add_person, R.drawable.ic_bar_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,26 +79,26 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the action bar.
-     //   final ActionBar actionBar = getActionBar();
+        //   final ActionBar actionBar = getActionBar();
 
         // Specify that the Home/Up button should not be enabled, since there is no hierarchical
         // parent.
-       // actionBar.setHomeButtonEnabled(false);
+        // actionBar.setHomeButtonEnabled(false);
 
         // Specify that we will be displaying tabs in the action bar.
-    //    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter( mAppSectionsPagerAdapter);
+        mViewPager.setAdapter(mAppSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 // When swiping between different app sections, select the corresponding tab.
                 // We can also use ActionBar.Tab#select() to do this if we have a reference to the
                 // Tab.
-          //      actionBar.setSelectedNavigationItem(position);
+                //      actionBar.setSelectedNavigationItem(position);
             }
         });
 
@@ -121,22 +123,17 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (position == 1)
-                        {
+                        if (position == 1) {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
-                        }
-                        else if(position == 2)
-                        {
+                        } else if (position == 2) {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
 
                             //Launch Shift Activity
                             Intent intent = new Intent(AnalyticsActivity.this, ShiftActivity.class);
                             startActivity(intent);
-                        }
-                        else if(position == 3)
-                        {
+                        } else if (position == 3) {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
 
@@ -248,9 +245,9 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                         Bartender bartender = itemSnapshot.getValue(Bartender.class);
 
                         if (bartender.totalOrdersServed != 0) {
-                            float duration = new Float((float)bartender.totalDuration).longValue();
+                            float duration = new Float((float) bartender.totalDuration).longValue();
                             float aveMillis = duration / bartender.totalOrdersServed;
-                            float aveSecs = aveMillis/1000;
+                            float aveSecs = aveMillis / 1000;
 
 
                             BarEntry barEntry = new BarEntry(aveSecs, idx); // Jan
@@ -265,7 +262,6 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                     barDataSet = new BarDataSet(yAxisBarData, "");
                     barDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
-
 
 
                     BarData data = new BarData(xAxisBarLabel, barDataSet);
@@ -304,6 +300,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
         Firebase ref = new Firebase("https://barq.firebaseio.com/");
         private AuthData authData;
         private Firebase user;
+        PieData d;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -319,59 +316,87 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
             pieChart.setDescription("");
 
-          //  Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
+            Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
+            Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
 
-            //pieChart.setCenterTextTypeface(tf);
-            pieChart.setCenterText("TEST");//generateCenterText());
-            pieChart.setCenterTextSize(10f);
-            //pieChart.setCenterTextTypeface(tf);
+            pieChart.setCenterText("Orders\n\nper\n\nLocation");//generateCenterText());
+            pieChart.setCenterTextSize(30f);
+            pieChart.setCenterTextTypeface(gothamMedium);
+            pieChart.setCenterTextColor(getContext().getResources().getColor(R.color.darkgray));
 
             // radius of the center hole in percent of maximum radius
-            pieChart.setHoleRadius(45f);
-            pieChart.setTransparentCircleRadius(50f);
+            pieChart.setHoleRadius(60f);
+            pieChart.setTransparentCircleRadius(65f);
+            pieChart.getLegend().setEnabled(false);
 
-            Legend l = pieChart.getLegend();
-            l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+            pieChart.setRotationEnabled(true);
+            pieChart.setHighlightEnabled(false);
 
-            pieChart.setData(generatePieData());
+//            pieChart.animateY(1400, AnimationEasing.EasingOption.EaseInOutQuad);
+            pieChart.animateY(1400);
+
+            pieChart.setUsePercentValues(true);
+
+            generatePieData();
 
             return rootView;
         }
 
-        private SpannableString generateCenterText() {
-            SpannableString s = new SpannableString("Revenues\nQuarters 2015");
-            s.setSpan(new RelativeSizeSpan(2f), 0, 8, 0);
-            s.setSpan(new ForegroundColorSpan(Color.GRAY), 8, s.length(), 0);
-            return s;
+
+        public int[] getBarChartColors(Context context){
+            int[] barChartColors = {Color.rgb(Color.red(context.getResources().getColor(R.color.redorange)),
+                    Color.green(context.getResources().getColor(R.color.redorange)),
+                    Color.blue(context.getResources().getColor(R.color.redorange))),
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.softyellow)),
+                            Color.green(context.getResources().getColor(R.color.softyellow)),
+                            Color.blue(context.getResources().getColor(R.color.softyellow))),
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.bluegreen)),
+                            Color.green(context.getResources().getColor(R.color.bluegreen)),
+                            Color.blue(context.getResources().getColor(R.color.bluegreen)))};
+            return barChartColors;
         }
 
-        protected PieData generatePieData() {
 
-            int count = 4;
+        private void generatePieData() {
 
-            ArrayList<Entry> entries1 = new ArrayList<Entry>();
-            ArrayList<String> xVals = new ArrayList<String>();
 
-            xVals.add("Quarter 1");
-            xVals.add("Quarter 2");
-            xVals.add("Quarter 3");
-            xVals.add("Quarter 4");
+            final ArrayList<Entry> entries1 = new ArrayList<Entry>();
+            final ArrayList<String> xVals = new ArrayList<String>();
 
-            for(int i = 0; i < count; i++) {
-                xVals.add("entry" + (i+1));
+            user.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i("inside", "of function");
+                    int idx = 0;
+                    for (DataSnapshot itemSnapshot : dataSnapshot.child("Devices").getChildren()) {
+                        Device device1 = itemSnapshot.getValue(Device.class);
+                        xVals.add(device1.Location);
+                        entries1.add(new Entry(device1.numOfOrders, idx));
+                        idx++;
+                    }
 
-                entries1.add(new Entry((float) (Math.random() * 60) + 40, i));
-            }
 
-            PieDataSet ds1 = new PieDataSet(entries1, "Quarterly Revenues 2015");
-            ds1.setColors(ColorTemplate.VORDIPLOM_COLORS);
-            ds1.setSliceSpace(2f);
-            ds1.setValueTextColor(Color.WHITE);
-            ds1.setValueTextSize(12f);
+                    Typeface gothamMedium =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamMedium.TTF");
+                    Typeface gothamRegular =Typeface.createFromAsset(getContext().getAssets(),"fonts/gothamRegular.TTF");
 
-            PieData d = new PieData(xVals, ds1);
+                    PieDataSet ds1 = new PieDataSet(entries1, "Location Data");
+                    ds1.setColors(getBarChartColors(getContext()));
+                    ds1.setSliceSpace(2f);
+                    ds1.setValueTextColor(Color.WHITE);
+                    ds1.setValueTypeface(gothamMedium);
+                    ds1.setValueTextSize(20f);
+                    d = new PieData(xVals, ds1);
+                    pieChart.setData(d);
+                }
 
-            return d;
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
         }
     }
 }
+
+

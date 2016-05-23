@@ -4,6 +4,7 @@ public class Device {
     String MACid;
     String Color;
     String Location;
+    int numOfOrders;
 
     public Device() {}
 
@@ -11,5 +12,6 @@ public class Device {
         this.MACid = MACid;
         this.Color = Color;
         this.Location = Location;
+        this.numOfOrders = 0;
     }
 }

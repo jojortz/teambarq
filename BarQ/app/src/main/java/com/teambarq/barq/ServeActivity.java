@@ -29,6 +29,7 @@ package com.teambarq.barq;
         import com.firebase.client.FirebaseError;
         import com.firebase.client.Query;
         import com.firebase.client.ValueEventListener;
+        import com.github.mikephil.charting.data.BarEntry;
         import com.squareup.picasso.Picasso;
         import com.skyfishjy.library.RippleBackground;
         import junit.framework.Test;
@@ -261,6 +262,7 @@ public class ServeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        finish();
     }
     @Override
     protected void onResume() {
@@ -488,6 +490,19 @@ public class ServeActivity extends AppCompatActivity {
                     user.child("BartenderList").child(currentServers.get(i)).child("totalDuration").setValue(totalTime);
                 }
                 user.child("RunningQueue").child(MACid).removeValue();
+
+                String device = "";
+                for (DataSnapshot itemSnapshot : snapshot.child("Devices").getChildren()) {
+                    Device device1 = itemSnapshot.getValue(Device.class);
+                    device = itemSnapshot.getKey();
+
+                    if (device1.MACid.equals(MACid)) {
+                        break;
+                    }
+                }
+                long totalOrders = (long) snapshot.child("Devices").child(device).child("numOfOrders").getValue();
+                totalOrders = totalOrders + 1 ;
+                user.child("Devices").child(device).child("numOfOrders").setValue(totalOrders);
 //                        Log.e("FB", "Added to AllOrders");
             }
             @Override
@@ -495,4 +510,11 @@ public class ServeActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
 }

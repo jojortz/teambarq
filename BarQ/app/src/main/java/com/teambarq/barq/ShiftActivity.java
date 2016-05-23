@@ -92,6 +92,7 @@ public class ShiftActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Save current ServerList to Firebase
+                activeListRef.removeValue();
                 SparseBooleanArray checkedItems = gridview.getCheckedItemPositions();
                 if (checkedItems != null) {
                     for (int i = 0; i < checkedItems.size(); i++) {
