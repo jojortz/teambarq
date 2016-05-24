@@ -15,8 +15,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+<<<<<<< HEAD
 import android.widget.ImageView;
+=======
 import android.widget.ImageButton;
+>>>>>>> 3bfb90653581d94899525643bf932f81bfea389e
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,7 @@ public class ShiftActivity extends AppCompatActivity {
     private AuthData authData;
     private Button createShiftButton;
     private ShiftAdapter adapter;
+    private ImageButton navigationMenuButton;
     Context context = this;
 
     //Navigation drawer

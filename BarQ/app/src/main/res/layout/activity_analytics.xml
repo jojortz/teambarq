@@ -7,7 +7,8 @@
 <android.support.v4.view.ViewPager
 android:id="@+id/pager"
 android:layout_width="match_parent"
-android:layout_height="match_parent" />
+android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
 
     <!-- Side navigation drawer UI -->
     <android.support.v7.widget.RecyclerView

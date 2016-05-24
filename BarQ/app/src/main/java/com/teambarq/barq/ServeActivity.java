@@ -13,10 +13,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +62,8 @@ public class ServeActivity extends AppCompatActivity {
     private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve","Feedback", "Help" };
     private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon, R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
 
+    private ImageButton navigationMenuButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,16 @@ public class ServeActivity extends AppCompatActivity {
         //set imageView of bar layout
         ImageView barLayoutView = (ImageView) findViewById(R.id.barLayoutImage);
         Picasso.with(context).load(R.drawable.barlayoutublank).into(barLayoutView);
+
+        navigationMenuButton = (ImageButton) findViewById(R.id.serveMenu_imageButton);
+
+        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Save current ServerList to Firebase
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
 
         //initialize location circles
         Resources res = getResources();
