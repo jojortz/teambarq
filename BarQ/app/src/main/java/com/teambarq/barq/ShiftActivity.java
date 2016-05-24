@@ -14,7 +14,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -99,7 +101,7 @@ public class ShiftActivity extends AppCompatActivity {
                     Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(getApplicationContext(),R.string.no_bartenders_selected,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),R.string.no_bartenders_selected, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -109,7 +111,7 @@ public class ShiftActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RoundedImageView img = (RoundedImageView)view.findViewById(R.id.bartender_imageView);
+                ImageView img = (ImageView)view.findViewById(R.id.bartender_imageView);
                 TextView name = (TextView) view.findViewById(R.id.bartender_textView);
 
                 float alphaVal = img.getAlpha();
