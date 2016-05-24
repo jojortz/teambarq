@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.HashMap;
@@ -21,11 +23,13 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.github.florent37.viewanimator.ViewAnimator;
 
 /**
  * Created by jaredostdiek on 4/4/16.
@@ -40,6 +44,11 @@ public class LoginActivity extends AppCompatActivity {
     String usernameStr;
     Firebase myFirebaseRef;
     private String barID;
+
+    private static String DEVICEMAC2 = "5ccf7f0fd6e4"; //center, yellow
+    private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
+    private static String DEVICEMAC3 = "18fe34d460aa"; //right, blue
+
     //TODO debounce buttons
     //TODO add condition for clicking next without anyhting in edittext
     @Override
@@ -60,8 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 //            getWindow().setStatusBarColor(getResources().getColor(R.color.royalblue));
 //        }
 
-
-
         //create objects for button and user inputs
         loginButton = (Button)findViewById(R.id.loginButton);
         userInput = (EditText)findViewById(R.id.username);
@@ -80,6 +87,40 @@ public class LoginActivity extends AppCompatActivity {
 
         //hide keyboard if click off edittext
         setupParent(findViewById(R.id.loginRelativeLayout));
+
+        //hide edittext and button during
+        nextButton.setVisibility(View.INVISIBLE);
+        userInput.setVisibility(View.INVISIBLE);
+
+        //animate logo
+        ImageView logoImage = (ImageView) findViewById(R.id.animationImageView);
+        ViewAnimator
+                .animate(logoImage)
+                .scale(0.0f, 1.1f, 0.7f)
+                .alpha(0,1)
+                .descelerate()
+                .duration(2000)
+                .thenAnimate(logoImage)
+                .scale(0.7f,0.7f)
+                .duration(1000)
+                .thenAnimate(logoImage)
+                .scale(0.7f, 10f)
+                .alpha(1,0)
+                .accelerate()
+                .duration(1000)
+                .start();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                //show edittext and button during
+                nextButton.setVisibility(View.VISIBLE);
+                userInput.setVisibility(View.VISIBLE);
+            }
+        }, 5000);
+
 
 
         //when next button is pressed determine if already a user or need to register
@@ -216,7 +257,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onAuthenticated(AuthData authData) {
                         //authenticated successfully
 
-
                         //create intent for control activity
                         Intent intentControl = new Intent(LoginActivity.this, ShiftActivity.class);
 
@@ -305,8 +345,8 @@ public class LoginActivity extends AppCompatActivity {
     //Adding Devices to Firebase
     private void addDevices() {
         Firebase newPostRef = myFirebaseRef.child(barID).child("Devices");
-        newPostRef.push().setValue(new Device("5ccf7f0fd6e4","Red","Left"));
-        newPostRef.push().setValue(new Device("5ccf7f006c6c","Yellow","Center"));
-        newPostRef.push().setValue(new Device("18fe34d45db8","Blue","Right"));
+        newPostRef.push().setValue(new Device(DEVICEMAC2,"Red","Left"));
+        newPostRef.push().setValue(new Device(DEVICEMAC1,"Yellow","Center"));
+        newPostRef.push().setValue(new Device(DEVICEMAC3,"Blue","Right"));
     }
 }

@@ -53,7 +53,8 @@ public class ServeActivity extends AppCompatActivity {
     SwipeAdapter mAdapter;
     private static String DEVICEMAC2 = "5ccf7f0fd6e4"; //center, yellow
     private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
-    private static String DEVICEMAC3 = "18fe34d45db8"; //right, blue
+    private static String DEVICEMAC3 = "18fe34d460aa"; //right, blue
+
     private Button endShift;
 
     //Navigation drawer
