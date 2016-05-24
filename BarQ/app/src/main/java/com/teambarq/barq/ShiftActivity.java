@@ -98,14 +98,19 @@ public class ShiftActivity extends AppCompatActivity {
                 //Save current ServerList to Firebase
                 activeListRef.removeValue();
 
+                boolean checked = false;
+
                 SparseBooleanArray checkedItems = gridview.getCheckedItemPositions();
                 if (checkedItems != null) {
                     for (int i = 0; i < checkedItems.size(); i++) {
                         if (checkedItems.valueAt(i)) {
                             Bartender newBartender = BartenderList.get(checkedItems.keyAt(i));
                             ActiveBartenderList.add(newBartender.getId());
+                            checked = true;
                         }
                     }
+                }
+                if(checked){
                     //Add active list to Firebase
                     activeListRef.setValue(ActiveBartenderList);
 
