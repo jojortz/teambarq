@@ -1,7 +1,6 @@
 package com.teambarq.barq;
+
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,15 @@ public class ShiftAdapter extends ArrayAdapter<Bartender>{
             row.setTag(holder);
         }
         ViewHolder h = (ViewHolder) row.getTag();
-        Picasso.with(thisContext).load(bartender.profilePic).into(h.image);
+
+        //Load image from resources locally
+        String mDrawableName = bartender.profilePic;
+        int resID = thisContext.getResources().getIdentifier( mDrawableName, "drawable", thisContext.getPackageName());
+        Picasso.with(thisContext).load(resID).fit().centerCrop().transform(new CircleTransform()).into(h.image);
+
+        //Load image from internet
+//        Picasso.with(thisContext).load(bartender.profilePic).fit().centerCrop().transform(new CircleTransform()).into(h.image);
+
         h.name.setText(bartender.name);
 
         return row;

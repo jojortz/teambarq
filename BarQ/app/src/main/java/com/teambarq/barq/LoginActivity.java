@@ -31,6 +31,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.github.florent37.viewanimator.ViewAnimator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jaredostdiek on 4/4/16.
  *File Description: Java file to control the Login Screen.
@@ -316,22 +319,22 @@ public class LoginActivity extends AppCompatActivity {
     //Adding Bartenders to Firebase
     public void addBartenders() {
         Firebase newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Tara", "https://www.jordanmatter.com/images/gallery/Tara_Westwood.jpg"));
+        newPostRef.setValue(new Bartender("Tara", "tara"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Jojo", "https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/10487280_10207376636688276_3277337388999426495_n.jpg?oh=5a65fb3a25ff4d777d14e7298ff7f880&oe=57E27F4D"));
+        newPostRef.setValue(new Bartender("Ian", "ian"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Alan", "https://www.jordanmatter.com/images/gallery/Alan_Cumming.jpg"));
+        newPostRef.setValue(new Bartender("Alan", "alan"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Mallory", "https://www.jordanmatter.com/images/gallery/Mallory_Moye.jpg"));
+        newPostRef.setValue(new Bartender("Kate", "kate"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Penn", "https://www.jordanmatter.com/images/gallery/penn-jillette.jpg"));
+        newPostRef.setValue(new Bartender("Penn", "penn"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Abena", "https://www.jordanmatter.com/images/gallery/Abena_Koomson.jpg"));
+        newPostRef.setValue(new Bartender("Abena", "abena"));
         updateBartenderID(newPostRef);
     }
 

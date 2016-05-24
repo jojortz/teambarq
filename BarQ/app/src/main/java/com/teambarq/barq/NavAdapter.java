@@ -33,8 +33,8 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
         TextView textView;
         ImageView imageView;
         ImageView profile;
-        TextView Name;
-        TextView email;
+     //   TextView Name;
+     //   TextView email;
 
 
         public ViewHolder(View itemView,int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
@@ -51,9 +51,9 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
             else{
 
 
-                //Name = (TextView) itemView.findViewById(R.id.name);         // Creating Text View object from header.xml for name
-                //email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
-                //profile = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
+              //  Name = (TextView) itemView.findViewById(R.id.name);         // Creating Text View object from header.xml for name
+             //   email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
+                profile = (ImageView) itemView.findViewById(R.id.imageView2);// Creating Image view object from header.xml for profile pic
                 Holderid = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }
@@ -121,9 +121,9 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
         }
         else{
 
-            //holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
-            //holder.Name.setText(name);
-            //holder.email.setText(email);
+            holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
+        //    holder.Name.setText(name);
+          //  holder.email.setText(email);
         }
     }
 

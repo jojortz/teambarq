@@ -4,7 +4,7 @@
     android:padding="10dp"
     android:background="@drawable/list_selector">
 
-    <com.teambarq.barq.RoundedImageView
+    <ImageView
         android:id="@+id/bartender_imageView"
         android:layout_width="130dp"
         android:layout_height="130dp"

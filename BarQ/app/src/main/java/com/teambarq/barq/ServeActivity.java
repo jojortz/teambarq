@@ -1,43 +1,40 @@
 package com.teambarq.barq;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.res.Resources;
-        import android.graphics.PorterDuff;
-        import android.graphics.Typeface;
-        import android.graphics.drawable.Drawable;
-        import android.support.v4.widget.DrawerLayout;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.support.v7.widget.LinearLayoutManager;
-        import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
-        import android.util.SparseBooleanArray;
-        import android.view.GestureDetector;
-        import android.view.MotionEvent;
-        import android.view.View;
-        import android.view.WindowManager;
-        import android.widget.Button;
-        import android.widget.ImageView;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.os.Handler;
-        import android.widget.Toast;
 
-        import com.firebase.client.AuthData;
-        import com.firebase.client.ChildEventListener;
-        import com.firebase.client.DataSnapshot;
-        import com.firebase.client.Firebase;
-        import com.firebase.client.FirebaseError;
-        import com.firebase.client.Query;
-        import com.firebase.client.ServerValue;
-        import com.firebase.client.ValueEventListener;
-        import com.github.mikephil.charting.data.BarEntry;
-        import com.squareup.picasso.Picasso;
-        import com.skyfishjy.library.RippleBackground;
-        import junit.framework.Test;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.concurrent.TimeUnit;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
+import com.skyfishjy.library.RippleBackground;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class ServeActivity extends AppCompatActivity {
     private long topQueueTime = 0; //initialize
@@ -56,15 +53,6 @@ public class ServeActivity extends AppCompatActivity {
     private static String DEVICEMAC3 = "18fe34d460aa"; //right, blue
 
     private Button endShift;
-
-    //Navigation drawer
-    private DrawerLayout mDrawerLayout;
-    private RecyclerView navRecyclerView;
-    RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
-    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
-
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,53 +221,7 @@ public class ServeActivity extends AppCompatActivity {
 
         });
 
-        //Setting up navigation drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.serve_drawerLayout);
 
-        navRecyclerView = (RecyclerView) findViewById(R.id.navRecyclerView); // Assigning the RecyclerView Object to the xml View
-
-        navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.bar_icon);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-        // And passing the titles,icons,header view name, header view email,
-        // and header view profile picture
-        navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-        navRecyclerView.setLayoutManager(mLayoutManager);
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-        navRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-
-        //Adding touch listener for RecycleView items
-        navRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        if (position == 1)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-
-                            //Launch Analytics Activity
-                            Intent intent = new Intent(ServeActivity.this, AnalyticsActivity.class);
-                            startActivity(intent);
-                        }
-                        else if(position == 2)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-
-                            //Launch Shift Activity
-                            Intent intent = new Intent(ServeActivity.this, ShiftActivity.class);
-                            startActivity(intent);
-                        }
-                        else if(position == 3)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-                        }
-                    }
-                })
-        );
     }
     @Override
     protected void onStop() {

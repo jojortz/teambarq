@@ -2,24 +2,20 @@ package com.teambarq.barq;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +27,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ShiftActivity extends AppCompatActivity {
     private ArrayList<Bartender> BartenderList;
@@ -43,17 +37,18 @@ public class ShiftActivity extends AppCompatActivity {
     private String BarID;
     private AuthData authData;
     private Button createShiftButton;
+    private ImageButton navigationMenuButton;
     private ShiftAdapter adapter;
     Context context = this;
 
     //Navigation drawer
     private DrawerLayout mDrawerLayout;
     private RecyclerView navRecyclerView;
-    RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
-    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    private RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
+    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon};
+    private String drawerTitles[] = { "Analytics", "Shift Creator","Feedback", "Help" };
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person, R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +63,16 @@ public class ShiftActivity extends AppCompatActivity {
         Typeface gothamBold =Typeface.createFromAsset(getAssets(),"fonts/gothamBold.TTF");
         shiftTitle.setTypeface(gothamRegular);
         createShiftButton.setTypeface(gothamBold);
+
+        navigationMenuButton = (ImageButton) findViewById(R.id.shiftMenu_imageButton);
+
+        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Show navigation menu
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
 
         //Initializing Bartender arrays
         BartenderList = new ArrayList<>();
@@ -93,22 +98,29 @@ public class ShiftActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Save current ServerList to Firebase
                 activeListRef.removeValue();
+
+                boolean checked = false;
+
                 SparseBooleanArray checkedItems = gridview.getCheckedItemPositions();
                 if (checkedItems != null) {
                     for (int i = 0; i < checkedItems.size(); i++) {
                         if (checkedItems.valueAt(i)) {
                             Bartender newBartender = BartenderList.get(checkedItems.keyAt(i));
                             ActiveBartenderList.add(newBartender.getId());
+                            checked = true;
                         }
                     }
                 }
+                if(checked){
+                    //Add active list to Firebase
+                    activeListRef.setValue(ActiveBartenderList);
 
-                //Add active list to Firebase
-                activeListRef.setValue(ActiveBartenderList);
-
-                //Launch Queue Activity
-                Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
-                startActivity(intent);
+                    //Launch Queue Activity
+                    Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(),R.string.no_bartenders_selected, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -117,7 +129,7 @@ public class ShiftActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RoundedImageView img = (RoundedImageView)view.findViewById(R.id.bartender_imageView);
+                ImageView img = (ImageView)view.findViewById(R.id.bartender_imageView);
                 TextView name = (TextView) view.findViewById(R.id.bartender_textView);
 
                 float alphaVal = img.getAlpha();
@@ -145,7 +157,7 @@ public class ShiftActivity extends AppCompatActivity {
 
         navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
-        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.bar_icon);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com",R.drawable.barq_logo_white_text);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
         // And passing the titles,icons,header view name, header view email,
         // and header view profile picture
         navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView
@@ -171,14 +183,6 @@ public class ShiftActivity extends AppCompatActivity {
                         {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
-                        }
-                        else if(position == 3)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-                            //Launch Serve Activity
-                            Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
-                            startActivity(intent);
                         }
                     }
                 })
