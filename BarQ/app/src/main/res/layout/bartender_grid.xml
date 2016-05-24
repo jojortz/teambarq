@@ -4,12 +4,14 @@
     android:padding="10dp"
     android:background="@drawable/list_selector">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.teambarq.barq.RoundedImageView
         android:id="@+id/bartender_imageView"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_centerHorizontal="true"
-        android:alpha="0.3" />
+        android:alpha="0.3"
+
+        />
 
     <TextView
         android:id="@+id/bartender_textView"

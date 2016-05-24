@@ -27,8 +27,6 @@ import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class ShiftActivity extends AppCompatActivity {
     private ArrayList<Bartender> BartenderList;
     private ArrayList<String> ActiveBartenderList;
@@ -130,7 +128,7 @@ public class ShiftActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CircleImageView img = (CircleImageView)view.findViewById(R.id.bartender_imageView);
+                RoundedImageView img = (RoundedImageView)view.findViewById(R.id.bartender_imageView);
                 TextView name = (TextView) view.findViewById(R.id.bartender_textView);
 
                 float alphaVal = img.getAlpha();
