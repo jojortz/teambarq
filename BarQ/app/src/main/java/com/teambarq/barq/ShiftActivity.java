@@ -10,11 +10,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -34,6 +37,7 @@ public class ShiftActivity extends AppCompatActivity {
     private AuthData authData;
     private Button createShiftButton;
     private ShiftAdapter adapter;
+    private ImageButton navigationMenuButton;
     Context context = this;
 
     //Navigation drawer
@@ -58,6 +62,16 @@ public class ShiftActivity extends AppCompatActivity {
         Typeface gothamBold =Typeface.createFromAsset(getAssets(),"fonts/gothamBold.TTF");
         shiftTitle.setTypeface(gothamRegular);
         createShiftButton.setTypeface(gothamBold);
+
+        navigationMenuButton = (ImageButton) findViewById(R.id.shiftMenu_imageButton);
+
+        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Save current ServerList to Firebase
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
 
         //Initializing Bartender arrays
         BartenderList = new ArrayList<>();
@@ -99,7 +113,7 @@ public class ShiftActivity extends AppCompatActivity {
                     Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(getApplicationContext(),R.string.no_bartenders_selected,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),R.string.no_bartenders_selected, Toast.LENGTH_SHORT).show();
                 }
             }
         });

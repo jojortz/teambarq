@@ -10,6 +10,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.teambarq.barq.ServeActivity">
+    <ImageButton
+        android:id="@+id/serveMenu_imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu_icon_white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:background="@color/bluegray"
+        />
 
     <ImageView
         android:id="@+id/barLayoutImage"
