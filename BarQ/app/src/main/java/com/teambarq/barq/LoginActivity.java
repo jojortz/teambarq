@@ -99,32 +99,30 @@ public class LoginActivity extends AppCompatActivity {
         ImageView logoImage = (ImageView) findViewById(R.id.animationImageView);
         ViewAnimator
                 .animate(logoImage)
-                .scale(0.0f, 1.1f, 0.7f)
-                .alpha(0,1)
-                .descelerate()
-                .duration(2000)
-                .thenAnimate(logoImage)
-                .scale(0.7f,0.7f)
-                .duration(1000)
-                .thenAnimate(logoImage)
-                .scale(0.7f, 10f)
-                .alpha(1,0)
+                .scale(0f,1.1f)
+                .duration(500)
                 .accelerate()
-                .duration(1000)
+                .thenAnimate(logoImage)
+                .scale(1.1f, 1f)
+                .accelerate()
+                .duration(100)
+                .thenAnimate(logoImage)
+                .scale(1f,1f)
+                .duration(400)
+                .thenAnimate(logoImage)
+                .bounceOut()
+                .duration(700)
                 .start();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Do something after 5s = 5000ms
-                //show edittext and button during
+                //show edittext and button after animation
                 nextButton.setVisibility(View.VISIBLE);
                 userInput.setVisibility(View.VISIBLE);
             }
-        }, 5000);
-
-
+        }, 2050);
 
         //when next button is pressed determine if already a user or need to register
         nextButton.setOnClickListener(new View.OnClickListener() {

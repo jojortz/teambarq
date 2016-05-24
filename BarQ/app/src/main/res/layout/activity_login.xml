@@ -17,7 +17,8 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_width="0px"
-        android:layout_height="0px"/>
+        android:layout_height="0px"
+        android:id="@+id/linearLayout" />
 
     <EditText
         android:id="@+id/username"
@@ -102,12 +103,10 @@
 
     <ImageView
         android:id="@+id/animationImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/barq_logo_white_text"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/barq_logo_center"
+        android:layout_alignBottom="@+id/loginButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
