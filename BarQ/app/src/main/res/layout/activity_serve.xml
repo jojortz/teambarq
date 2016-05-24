@@ -1,25 +1,11 @@
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/serve_drawerLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
 <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id = "@+id/serveActivityRL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.teambarq.barq.ServeActivity">
-    <ImageButton
-        android:id="@+id/serveMenu_imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_icon_white"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:background="@color/bluegray"
-        />
-
     <ImageView
         android:id="@+id/barLayoutImage"
         android:layout_width="wrap_content"
@@ -192,14 +178,3 @@
 
 
 </RelativeLayout>
-
-    <!-- Side navigation drawer UI -->
-    <android.support.v7.widget.RecyclerView
-    android:id="@+id/serve_navRecyclerView"
-    android:layout_width="320dp"
-    android:layout_height="match_parent"
-    android:layout_gravity="left"
-    android:background="#ffffff"
-    android:scrollbars="vertical">
-    </android.support.v7.widget.RecyclerView>
-</android.support.v4.widget.DrawerLayout>

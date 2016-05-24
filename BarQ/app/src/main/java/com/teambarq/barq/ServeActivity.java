@@ -53,17 +53,6 @@ public class ServeActivity extends AppCompatActivity {
     private static String DEVICEMAC3 = "18fe34d45db8"; //right, blue
     private Button endShift;
 
-    //Navigation drawer
-    private DrawerLayout mDrawerLayout;
-    private RecyclerView navRecyclerView;
-    private RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
-    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
-
-    private String drawerTitles[] = { "Analytics", "Shift Creator", "Serve","Feedback", "Help" };
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon,R.drawable.ic_add_person,R.drawable.ic_bar_icon, R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
-
-    private ImageButton navigationMenuButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,16 +73,6 @@ public class ServeActivity extends AppCompatActivity {
         //set imageView of bar layout
         ImageView barLayoutView = (ImageView) findViewById(R.id.barLayoutImage);
         Picasso.with(context).load(R.drawable.barlayoutublank).into(barLayoutView);
-
-        navigationMenuButton = (ImageButton) findViewById(R.id.serveMenu_imageButton);
-
-        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Save current ServerList to Firebase
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-            }
-        });
 
         //initialize location circles
         Resources res = getResources();
@@ -241,53 +220,7 @@ public class ServeActivity extends AppCompatActivity {
 
         });
 
-        //Setting up navigation drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.serve_drawerLayout);
 
-        navRecyclerView = (RecyclerView) findViewById(R.id.serve_navRecyclerView); // Assigning the RecyclerView Object to the xml View
-
-        navRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-        navAdapter = new NavAdapter(drawerTitles, drawerIcons, "BarQ", "BarQ@gmail.com", R.drawable.barq_logo_white_text);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-        // And passing the titles,icons,header view name, header view email,
-        // and header view profile picture
-        navRecyclerView.setAdapter(navAdapter);                              // Setting the adapter to RecyclerView
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-        navRecyclerView.setLayoutManager(mLayoutManager);
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-        navRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-
-        //Adding touch listener for RecycleView items
-        navRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        if (position == 1)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-
-                            //Launch Analytics Activity
-                            Intent intent = new Intent(ServeActivity.this, AnalyticsActivity.class);
-                            startActivity(intent);
-                        }
-                        else if(position == 2)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-
-                            //Launch Shift Activity
-                            Intent intent = new Intent(ServeActivity.this, ShiftActivity.class);
-                            startActivity(intent);
-                        }
-                        else if(position == 3)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-                        }
-                    }
-                })
-        );
     }
     @Override
     protected void onStop() {

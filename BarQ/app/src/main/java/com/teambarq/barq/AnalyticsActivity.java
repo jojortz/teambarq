@@ -16,10 +16,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.client.AuthData;
@@ -55,8 +57,10 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
     private RecyclerView.Adapter navAdapter;                        // Declaring Adapter For Recycler View
     private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
-    private String drawerTitles[] = {"Analytics", "Shift Creator", "Serve", "Feedback", "Help"};
-    private int drawerIcons[] = {R.drawable.ic_analytics_icon, R.drawable.ic_add_person, R.drawable.ic_bar_icon, R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
+    private String drawerTitles[] = {"Analytics", "Shift Creator", "Feedback", "Help"};
+    private int drawerIcons[] = {R.drawable.ic_analytics_icon, R.drawable.ic_add_person,  R.drawable.ic_feedback_icon, R.drawable.ic_help_icon};
+
+    private ImageButton navigationMenuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,18 +132,21 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                             //Launch Shift Activity
                             Intent intent = new Intent(AnalyticsActivity.this, ShiftActivity.class);
                             startActivity(intent);
-                        } else if (position == 3) {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-
-                            //Launch Serve Activity
-                            Intent intent = new Intent(AnalyticsActivity.this, ServeActivity.class);
-                            startActivity(intent);
                         }
                     }
                 })
         );
 
+        navigationMenuButton = (ImageButton) findViewById(R.id.analyticsMenu_imageButton);
+
+        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Save current ServerList to Firebase
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+        mDrawerLayout.closeDrawers();
 
     }
 

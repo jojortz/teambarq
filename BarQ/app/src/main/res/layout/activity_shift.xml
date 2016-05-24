@@ -5,66 +5,67 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.teambarq.barq.ShiftActivity">
-
-    <ImageButton
-        android:id="@+id/shiftMenu_imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_icon_white"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:background="@color/bluegray"
-        />
-    <TextView
-        android:id="@+id/shiftTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/shift_activity_title"
-        android:layout_marginTop="10dp"
-        android:textSize="30sp"
-        android:textColor="@color/bluegray"/>
-
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/bartender_gridview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnWidth="270dp"
-        android:numColumns="3"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:stretchMode="spacingWidthUniform"
-        android:gravity="center"
-        android:layout_below="@id/shiftTitle_textView"
-        android:layout_above="@+id/newShift_Button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/shiftMenu_imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_icon_white"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/bluegray"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="com.teambarq.barq.ShiftActivity">
 
+            <TextView
+                android:id="@+id/shiftTitle_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/shift_activity_title"
+                android:layout_marginTop="10dp"
+                android:textSize="30sp"
+                android:textColor="@color/bluegray"   />
+            <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:id="@+id/bartender_gridview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnWidth="270dp"
+                    android:numColumns="3"
+                    android:verticalSpacing="10dp"
+                android:horizontalSpacing="10dp"
+                android:stretchMode="spacingWidthUniform"
+                android:gravity="center"
+                android:layout_below="@id/shiftTitle_textView"
+                android:layout_above="@+id/newShift_Button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp" />
 
-    <Button
-        android:id="@+id/newShift_Button"
-        android:layout_width="250dp"
-        android:textSize="12pt"
-        android:layout_height="wrap_content"
-        android:text="@string/newShiftButton"
-        android:background="@color/bluegray"
-        android:textColor="@color/whitesmoke"
-        android:textAllCaps="false"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+             <Button
+                android:id="@+id/newShift_Button"
+                android:layout_width="250dp"
+                android:textSize="12pt"
+                android:layout_height="wrap_content"
+                android:text="@string/newShiftButton"
+                android:background="@color/bluegray"
+                android:textColor="@color/whitesmoke"
+                android:textAllCaps="false"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+            </RelativeLayout>
 
     </RelativeLayout>
-    <!-- Side navigation drawer UI -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/navRecyclerView"
         android:layout_width="320dp"

@@ -37,6 +37,7 @@ public class ShiftActivity extends AppCompatActivity {
     private String BarID;
     private AuthData authData;
     private Button createShiftButton;
+    private ImageButton navigationMenuButton;
     private ShiftAdapter adapter;
     Context context = this;
 
@@ -68,7 +69,7 @@ public class ShiftActivity extends AppCompatActivity {
         navigationMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Save current ServerList to Firebase
+                //Show navigation menu
                 mDrawerLayout.openDrawer(Gravity.LEFT);
             }
         });
@@ -182,14 +183,6 @@ public class ShiftActivity extends AppCompatActivity {
                         {
                             //Close navigation drawer
                             mDrawerLayout.closeDrawers();
-                        }
-                        else if(position == 3)
-                        {
-                            //Close navigation drawer
-                            mDrawerLayout.closeDrawers();
-                            //Launch Serve Activity
-                            Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
-                            startActivity(intent);
                         }
                     }
                 })
