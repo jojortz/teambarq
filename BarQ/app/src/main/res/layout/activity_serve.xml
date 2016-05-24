@@ -182,7 +182,7 @@
         android:textSize="12pt"
         android:layout_height="wrap_content"
         android:text="@string/endShiftButton"
-        android:background="@color/bluegray"
+        android:background="@color/royalblue"
         android:textColor="@color/whitesmoke"
         android:textAllCaps="false"
         android:layout_alignParentBottom="true"

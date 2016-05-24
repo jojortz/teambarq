@@ -10,13 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,15 +61,15 @@ public class ShiftActivity extends AppCompatActivity {
         shiftTitle.setTypeface(gothamRegular);
         createShiftButton.setTypeface(gothamBold);
 
-        navigationMenuButton = (ImageButton) findViewById(R.id.shiftMenu_imageButton);
-
-        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Save current ServerList to Firebase
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-            }
-        });
+//        navigationMenuButton = (ImageButton) findViewById(R.id.shiftMenu_imageButton);
+//
+//        navigationMenuButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Save current ServerList to Firebase
+//                mDrawerLayout.openDrawer(Gravity.LEFT);
+//            }
+//        });
 
         //Initializing Bartender arrays
         BartenderList = new ArrayList<>();

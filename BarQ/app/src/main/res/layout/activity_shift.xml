@@ -21,7 +21,7 @@
         android:src="@drawable/ic_menu_icon_white"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/bluegray"
+        android:background="@color/royalblue"
         />
     <TextView
         android:id="@+id/shiftTitle_textView"
@@ -57,7 +57,7 @@
         android:textSize="12pt"
         android:layout_height="wrap_content"
         android:text="@string/newShiftButton"
-        android:background="@color/bluegray"
+        android:background="@color/royalblue"
         android:textColor="@color/whitesmoke"
         android:textAllCaps="false"
         android:layout_alignParentBottom="true"

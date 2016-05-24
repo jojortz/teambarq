@@ -271,22 +271,22 @@ public class LoginActivity extends AppCompatActivity {
     //Adding Bartenders to Firebase
     public void addBartenders() {
         Firebase newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Tara", "tara.jpg"));
+        newPostRef.setValue(new Bartender("Tara", "tara"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Ian", "ian.jpg"));
+        newPostRef.setValue(new Bartender("Ian", "ian"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Alan", "alan.jpg"));
+        newPostRef.setValue(new Bartender("Alan", "alan"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Hettienne", "hettienne.jpg"));
+        newPostRef.setValue(new Bartender("Kate", "kate"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Penn", "penn.jpg"));
+        newPostRef.setValue(new Bartender("Penn", "penn"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Abena", "abena.jpg"));
+        newPostRef.setValue(new Bartender("Abena", "abena"));
         updateBartenderID(newPostRef);
     }
 

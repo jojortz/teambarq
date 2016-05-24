@@ -207,8 +207,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
 
     public static class BarChartFragment extends Fragment {
-        private ArrayList<BarEntry> yAxisBarData = new ArrayList<>();
-        private ArrayList<String> xAxisBarLabel = new ArrayList<>();
+        private ArrayList<BarEntry> yAxisBarData;
+        private ArrayList<String> xAxisBarLabel;
         private BarDataSet barDataSet;
 
         Firebase ref = new Firebase("https://barq.firebaseio.com/");
@@ -242,26 +242,7 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
             barchartTitle.setTypeface(gothamMedium);
             barchartTitle.setTextColor(getResources().getColor(R.color.darkgray));
 
-            YAxis yAxis = chart.getAxisLeft();
-            yAxis.setTypeface(gothamMedium);
-            yAxis.setTextColor(getResources().getColor(R.color.darkgray));
-            yAxis.setTextSize(20);
-            yAxis.setDrawGridLines(false);
-            yAxis.setDrawLabels(true);
-            yAxis.setValueFormatter(new IntForBarChartValueFormatter());
 
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setTypeface(gothamMedium);
-            xAxis.setTextColor(getResources().getColor(R.color.darkgray));
-            xAxis.setTextSize(20f);
-            xAxis.setDrawGridLines(false);
-
-            //format chart
-            chart.setDescription("");
-            chart.getAxisRight().setEnabled(false); //turn off right axis
-            chart.getLegend().setEnabled(false);
-            chart.setDrawGridBackground(false);
 
             //get data
             getDataSet();
@@ -277,51 +258,52 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.i("inside", "of function");
-
+                    yAxisBarData = new ArrayList<>();
+                    xAxisBarLabel = new ArrayList<>();
                     int idx = 0;
                     for (DataSnapshot bartenderSnapshot : dataSnapshot.child("BartenderList").getChildren()) {
                         Bartender bartender = bartenderSnapshot.getValue(Bartender.class);
-
                         //get ave time for each bartender
                         if (bartender.totalOrdersServed != 0) {
                             float duration = new Float((float) bartender.totalDuration).longValue();
                             float aveMillis = duration / bartender.totalOrdersServed;
                             float aveSecs = aveMillis / 1000;
 
-
                             BarEntry barEntry = new BarEntry(aveSecs, idx);
                             yAxisBarData.add(barEntry);
 
                             //add bartender to x axis array
                             xAxisBarLabel.add(bartender.getName());
-                            Log.e("Error",bartender.getName());
-
                             idx++;
                         }
-
-                        int allOrdersCount = 0;
-                        float allOrdersDur = 0;
-
-                        for (DataSnapshot orderSnapshot : dataSnapshot.child("AllOrders").getChildren()) {
-                            Order order = orderSnapshot.getValue(Order.class);
-
-                            float orderDur = new Float((float) order.Duration).longValue();
-                            allOrdersDur = allOrdersDur + orderDur;
-                            allOrdersCount++;
-
-                        }
-
-                        float aveOrderDur = (allOrdersDur / allOrdersCount) / 1000;
-
-                        Log.i("aveLine", String.valueOf(aveOrderDur));
-                        line = new LimitLine(aveOrderDur);
-                        line.setLineColor(getResources().getColor(R.color.darkgray));
-                        line.setLineWidth(4);
-                        line.enableDashedLine(20f, 10f, 0f);
-                        line.setLabel(getResources().getString(R.string.bar_ave_wait));
-                        line.setTextSize(15);
-                        line.setTextColor(getResources().getColor(R.color.darkgray));
                     }
+
+                    int allOrdersCount = 0;
+                    float allOrdersDur = 0;
+
+                    for (DataSnapshot orderSnapshot : dataSnapshot.child("AllOrders").getChildren()) {
+                        Order order = orderSnapshot.getValue(Order.class);
+
+                        float orderDur = new Float((float) order.Duration).longValue();
+                        allOrdersDur = allOrdersDur + orderDur;
+                        allOrdersCount++;
+
+                    }
+
+                    float aveOrderDur = (allOrdersDur / allOrdersCount) / 1000;
+
+                    Log.i("aveLine", String.valueOf(aveOrderDur));
+                    line = new LimitLine(aveOrderDur);
+                    line.setLineColor(getResources().getColor(R.color.darkgray));
+                    line.setLineWidth(4);
+                    line.enableDashedLine(20f, 10f, 0f);
+                    line.setLabel(getResources().getString(R.string.bar_ave_wait));
+                    line.setTextSize(15);
+                    line.setTextColor(getResources().getColor(R.color.darkgray));
+
+
+                    Typeface gothamRegular = Typeface.createFromAsset(getContext().getAssets(), "fonts/gothamRegular.TTF");
+                    Typeface gothamMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/gothamMedium.TTF");
 
                     barDataSet = new BarDataSet(yAxisBarData, "");
 
@@ -329,15 +311,37 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
 
                     BarData data = new BarData(xAxisBarLabel, barDataSet);
 
+
                     //add average value limitLine
                     YAxis yAxis = chart.getAxisLeft();
                     yAxis.addLimitLine(line);
+                    yAxis.setTypeface(gothamMedium);
+                    yAxis.setTextColor(getResources().getColor(R.color.darkgray));
+                    yAxis.setTextSize(20);
+                    yAxis.setDrawGridLines(false);
+                    yAxis.setDrawLabels(true);
+                    yAxis.setValueFormatter(new IntForBarChartValueFormatter());
 
+                    XAxis xAxis = chart.getXAxis();
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    xAxis.setTypeface(gothamMedium);
+                    xAxis.setTextColor(getResources().getColor(R.color.darkgray));
+                    xAxis.setTextSize(16f);
+                    xAxis.setDrawGridLines(false);
+
+                    //format chart
+                    chart.setDescription("");
+                    chart.getAxisRight().setEnabled(false); //turn off right axis
+                    chart.setHighlightPerTapEnabled(false);
+                    chart.setDrawHighlightArrow(false);
+                    chart.setHighlightPerDragEnabled(false);
+                    chart.getLegend().setEnabled(false);
+                    chart.setDrawGridBackground(false);
+                    chart.setPinchZoom(false);
+                    chart.setDoubleTapToZoomEnabled(false);
                     chart.setData(data);
+                    chart.animateY(3000);
                     chart.getData().setDrawValues(false);
-
-
-                    chart.getAnimator().animateY(3000);
                     chart.invalidate();
                 }
 
