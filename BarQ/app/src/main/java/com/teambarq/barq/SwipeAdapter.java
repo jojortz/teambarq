@@ -1,5 +1,6 @@
 package com.teambarq.barq;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> {
+    private ViewGroup parent1;
+    Typeface gothamRegular;
+    Typeface gothamMedium;
 
     public interface OnItemClickListener {
         void onItemServed(int position);
@@ -29,6 +33,8 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        parent1=parent;
+        gothamRegular =Typeface.createFromAsset(parent1.getContext().getAssets(),"fonts/gothamRegular.TTF");
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_swipe, parent, false));
     }
 
@@ -36,7 +42,9 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Device device1 = getItem(position);
         holder.Location.setText(device1.Location);
-
+        holder.Location.setTypeface(gothamRegular);
+        holder.Location.setTextSize(30);
+        holder.Location.setTextColor(parent1.getContext().getResources().getColor(R.color.darkgray));
         switch(device1.Color) {
             case "Blue":
                 holder.Location.setBackgroundResource(R.color.bluegreen);
