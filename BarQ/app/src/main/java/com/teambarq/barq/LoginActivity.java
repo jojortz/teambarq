@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     Firebase myFirebaseRef;
     private String barID;
 
-    private static String DEVICEMAC2 = "5ccf7f0fd6e4"; //center, yellow
+    private static String DEVICEMAC2 = "18fe34d40e2c"; //center, yellow
     private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
     private static String DEVICEMAC3 = "18fe34d460aa"; //right, blue
 
@@ -320,7 +320,7 @@ public class LoginActivity extends AppCompatActivity {
         newPostRef.setValue(new Bartender("Tara", "tara"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Ian", "ian"));
+        newPostRef.setValue(new Bartender("Jojo", "jojo"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
         newPostRef.setValue(new Bartender("Alan", "alan"));

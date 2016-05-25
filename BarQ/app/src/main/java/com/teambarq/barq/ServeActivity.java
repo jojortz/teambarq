@@ -48,7 +48,7 @@ public class ServeActivity extends AppCompatActivity {
     private ArrayList<String> currentServers;
     int pos = 0;
     SwipeAdapter mAdapter;
-    private static String DEVICEMAC2 = "5ccf7f0fd6e4"; //center, yellow
+    private static String DEVICEMAC2 = "18fe34d40e2c"; //center, yellow
     private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
     private static String DEVICEMAC3 = "18fe34d460aa"; //right, blue
 
@@ -386,7 +386,6 @@ public class ServeActivity extends AppCompatActivity {
                 Device device1 = mAdapter.getItem(position);
                 user.child("RunningQueue").child(device1.MACid).setValue(null);
                 position=position+1;
-                Toast.makeText(ServeActivity.this, "Item deleted at position" + position, Toast.LENGTH_LONG).show();
 //                Log.e("FB", "Deleted from FB");
             }
         });

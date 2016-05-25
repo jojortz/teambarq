@@ -116,6 +116,7 @@ public class ShiftActivity extends AppCompatActivity {
                     activeListRef.setValue(ActiveBartenderList);
 
                     //Launch Queue Activity
+                    ref.child(BarID).child("RunningQueue").removeValue();
                     Intent intent = new Intent(ShiftActivity.this, ServeActivity.class);
                     startActivity(intent);
                 }else{
