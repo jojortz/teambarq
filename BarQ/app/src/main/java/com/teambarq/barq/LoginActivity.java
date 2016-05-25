@@ -79,6 +79,10 @@ public class LoginActivity extends AppCompatActivity {
         nextButton = (Button) findViewById(R.id.nextButton);
         registerButton = (Button) findViewById(R.id.registerButton);
 
+        //Hardcoding user and password for demo
+        userInput.setText("thepatio@gmail.com");
+        passInput.setText("patio");
+
         //set fonts
         Typeface gothamExtraLight =Typeface.createFromAsset(getAssets(),"fonts/gothamExtraLight.TTF");
         Typeface gothamBold =Typeface.createFromAsset(getAssets(),"fonts/gothamBold.TTF");
