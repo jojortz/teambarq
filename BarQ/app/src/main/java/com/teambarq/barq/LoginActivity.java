@@ -324,7 +324,7 @@ public class LoginActivity extends AppCompatActivity {
         newPostRef.setValue(new Bartender("Tara", "tara"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
-        newPostRef.setValue(new Bartender("Jojo", "jojo"));
+        newPostRef.setValue(new Bartender("Michael", "michael"));
         updateBartenderID(newPostRef);
         newPostRef = myFirebaseRef.child(barID).child("BartenderList").push();
         newPostRef.setValue(new Bartender("Alan", "alan"));

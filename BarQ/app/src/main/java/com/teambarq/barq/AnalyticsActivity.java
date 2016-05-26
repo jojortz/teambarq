@@ -382,9 +382,9 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                             Color.green(context.getResources().getColor(R.color.brightpurple)),
                             Color.blue(context.getResources().getColor(R.color.brightpurple))),
 
-                    Color.rgb(Color.red(context.getResources().getColor(R.color.forestgreen)),
-                            Color.green(context.getResources().getColor(R.color.forestgreen)),
-                            Color.blue(context.getResources().getColor(R.color.forestgreen)))};
+                    Color.rgb(Color.red(context.getResources().getColor(R.color.sweetpink)),
+                            Color.green(context.getResources().getColor(R.color.sweetpink)),
+                            Color.blue(context.getResources().getColor(R.color.sweetpink)))};
 
             return barChartColors;
         }

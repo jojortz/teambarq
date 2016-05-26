@@ -51,6 +51,9 @@ public class ServeActivity extends AppCompatActivity {
     private static String DEVICEMAC2 = "18fe34d40e2c"; //center, yellow
     private static String DEVICEMAC1 = "5ccf7f006c6c"; //left, red
     private static String DEVICEMAC3 = "18fe34d460aa"; //right, blue
+    Query query1;
+    ChildEventListener listener1;
+    ValueEventListener listener2;
 
     private Button endShift;
 
@@ -212,6 +215,8 @@ public class ServeActivity extends AppCompatActivity {
                 //Remove data from firebase
                 user.child("RunningQueue").removeValue();
                 user.child("ActiveBartenderList").removeValue();
+                query1.removeEventListener(listener1);
+                user.removeEventListener(listener2);
 
                 //Launch Shift Activity
                 Intent intent = new Intent(ServeActivity.this, ShiftActivity.class);
@@ -260,36 +265,14 @@ public class ServeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 //        Log.e("FB","All devices added");
-        Query query1 = user.child("RunningQueue").orderByChild("QueuePosition");
-        query1.addChildEventListener(new ChildEventListener() {
+        query1 = user.child("RunningQueue").orderByChild("QueuePosition");
+        listener1 = query1.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 String MACid = snapshot.getKey();
                 Device currentDevice;
-                //Load data initially if anything in RunningQueue
-                if (snapshot.child("TimeIn").getValue()!= null) {
-//                  Log.e("FB", "Loading previous data");
-                    Order order1 = snapshot.getValue(Order.class);
-                    if (pos < order1.QueuePosition) {
-                        pos = order1.QueuePosition;
-                    }
-                    currentDevice = devices.get(0);
-                    for (int i = 0; i < devices.size(); i++) {
-                        if (devices.get(i).MACid.equals(MACid)) {
-                            currentDevice = devices.get(i);
-                            break;
-                        }
-                    }
-                    mAdapter.addItem(currentDevice);
 
-                    // update top of queue time for top of the list
-                    if (order1.QueuePosition == 1){
-                        topQueueTime = order1.TimeIn;
-                    }
-                }
                 //A new embedded device has been added; add it to the list
-                else
-                {
 //                    Log.e("FB", "Adding new device found");
 //                    Log.e("FB", MACid);
                     pos = pos + 1;
@@ -311,7 +294,7 @@ public class ServeActivity extends AppCompatActivity {
                     }
                     //update view by adding location circle
                     addLocationCircle(MACid);
-                }
+
             }
             //Handle the case when either order was deleted by the embedded device or deleted/server using the app
             @Override
@@ -360,7 +343,7 @@ public class ServeActivity extends AppCompatActivity {
 
         //dataevent listener
         //Check to see if any items in running queue and set topQueueTime to null if not
-        user.addValueEventListener(new ValueEventListener() {
+        listener2 = user.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.child("RunningQueue").getValue()==null){
@@ -477,6 +460,10 @@ public class ServeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        user.child("RunningQueue").removeValue();
+        user.child("ActiveBartenderList").removeValue();
+        query1.removeEventListener(listener1);
+        user.removeEventListener(listener2);
         this.finish();
     }
 
