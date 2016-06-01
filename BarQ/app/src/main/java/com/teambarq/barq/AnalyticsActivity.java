@@ -94,8 +94,8 @@ public class AnalyticsActivity extends FragmentActivity implements ActionBar.Tab
                 // We can also use ActionBar.Tab#select() to do this if we have a reference to the
                 // Tab.
                 //      actionBar.setSelectedNavigationItem(position);
-                pieChart.animateY(1400);
                 chart.animateY(3000);
+                pieChart.animateY(1400);
                 chart.invalidate();
                 pieChart.invalidate();
             }
